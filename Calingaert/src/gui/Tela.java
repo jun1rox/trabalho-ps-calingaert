@@ -19,16 +19,14 @@ public class Tela extends javax.swing.JFrame {
      */
     public Tela() {
         initComponents();
-        preencheTabela();
     }
     
-    public void preencheTabela() {
+    public void preencheTabela(Memoria memoria) {
         String colunas[] = {"Endereço", "Valor"};
         
         Dados dados = new Dados();
-        Memoria memoria = new Memoria();
         
-        DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria.getMemoria()), colunas);
+        DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria), colunas);
         jTable1.setModel(model);
     }
 

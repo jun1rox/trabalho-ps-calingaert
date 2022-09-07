@@ -28,7 +28,7 @@ public class Memoria {
         this.ponteiroPilha = 3;
 
         Arrays.fill(this.memoria, "0000000000000000");
-        this.memoria[1] = "0000000000001010"; //segunda posiçaõ da memória (10 = tamanho da pilha)
+        this.memoria[1] = "0000000000000101"; //segunda posiçaõ da memória (5 = tamanho da pilha)
 
     }
 

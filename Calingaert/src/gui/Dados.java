@@ -13,8 +13,6 @@ import trabalho_ps.Memoria;
 public class Dados {
     // RECEBE UM ARRAY DE STRING E MANDA COM O INDICE PARA A TABELA
     
-    private Memoria memoria;
-    
     public Dados() {
         
     }
