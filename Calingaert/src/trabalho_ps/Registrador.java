@@ -1,35 +1,38 @@
 package trabalho_ps;
 
+import static trabalho_ps.FuncoesUteis.binaryStringToInt;
+
 /**
  *
  * @author gusta
  */
 public class Registrador {
 
-    private int posicao;
-    private Memoria memoria;
+    private String valor;
 
-    public Registrador(Memoria mem, int pos) {
-        this.posicao = pos;
-        this.memoria = mem;
+    public Registrador() {
+        this.valor = "0000000000000000";
     }
 
-    public void setRegistrador(String a) {
-        this.memoria.setMemoriaPosicao(posicao, a);
+    public Registrador(String valor) {
+        this.valor = valor;
+    }
 
+    public void setValor(String a) {
+        this.valor = a;
     }
 
     public String getRegistrador() {
-        return this.memoria.getMemoriaPosicao(posicao);
+        return this.valor;
     }
 
     public int getRegistradorInt() {
-        return this.memoria.getMemoriaPosicaoInt(posicao);
+        return binaryStringToInt(this.valor);
     }
 
     public void add(int numero) {
         int reg = FuncoesUteis.binaryStringToInt(this.getRegistrador());       // pega o valor do registrador e converte pra int
-        this.setRegistrador(FuncoesUteis.intToBinaryString(reg + numero, 16)); // soma o valor com a entrada, converte pra string binario e seta o valor novo
+        this.setValor(FuncoesUteis.intToBinaryString(reg + numero, 16)); // soma o valor com a entrada, converte pra string binario e seta o valor novo
     }
 
     public void add(String binario) {
