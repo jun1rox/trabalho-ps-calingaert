@@ -18,21 +18,21 @@ public class Registrador {
         this.valor = valor;
     }
 
-    public void setValor(String a) {
+    public void set(String a) {
         this.valor = a;
     }
 
-    public String getRegistrador() {
+    public String get() {
         return this.valor;
     }
 
-    public int getRegistradorInt() {
+    public int getValorInt() {
         return binaryStringToInt(this.valor);
     }
 
     public void add(int numero) {
-        int reg = FuncoesUteis.binaryStringToInt(this.getRegistrador());       // pega o valor do registrador e converte pra int
-        this.setValor(FuncoesUteis.intToBinaryString(reg + numero, 16)); // soma o valor com a entrada, converte pra string binario e seta o valor novo
+        int reg = FuncoesUteis.binaryStringToInt(this.get());       // pega o valor do registrador e converte pra int
+        this.set(FuncoesUteis.intToBinaryString(reg + numero, 16)); // soma o valor com a entrada, converte pra string binario e seta o valor novo
     }
 
     public void add(String binario) {
