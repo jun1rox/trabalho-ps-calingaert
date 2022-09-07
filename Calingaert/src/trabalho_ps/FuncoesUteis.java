@@ -40,7 +40,7 @@ public class FuncoesUteis {
     }
 
     public static String registradorDisplay(Registrador reg) {
-        Integer valor = FuncoesUteis.binaryStringToInt(reg.getRegistrador());
+        Integer valor = FuncoesUteis.binaryStringToInt(reg.get());
         return valor.toString();
 
     }

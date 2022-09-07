@@ -29,14 +29,13 @@ public class Calingaert {
         Registrador RE = new Registrador();
         String caminho = "../programa.txt";
         
-        Tela tela = new Tela();
-        
-        
         try {
             memoria.carregaPrograma(caminho);
         } catch (IOException ex) {
             Logger.getLogger(Calingaert.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        Tela tela = new Tela(PC, memoria);
         
         tela.preencheTabela(memoria);
         tela.setVisible(true);

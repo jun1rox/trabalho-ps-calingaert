@@ -8,8 +8,8 @@ import static trabalho_ps.FuncoesUteis.binaryStringToInt;
  */
 public class Instrucoes {
     
-    public String getInstrucao(Registrador PC, Memoria memoria) {
-        int op1, op2, op3;
+    public static String getInstrucao(Registrador PC, Memoria memoria) {
+        int op1, op2;
         int pos_instrucao = PC.getValorInt();
         int instrucao = binaryStringToInt(memoria.getMemoriaPosicao(pos_instrucao));
         switch(instrucao) {
@@ -17,6 +17,7 @@ public class Instrucoes {
                 op1 = binaryStringToInt(memoria.getMemoriaPosicao(pos_instrucao));
                 op2 = binaryStringToInt(memoria.getMemoriaPosicao(pos_instrucao));
                 PC.add(3);
+                
                 return "COPY " + op1 + " " + op2;
             }
             default -> {
