@@ -6,6 +6,7 @@ package gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import trabalho_ps.Memoria;
 
 /**
  *
@@ -23,17 +24,11 @@ public class Tela extends javax.swing.JFrame {
     
     public void preencheTabela() {
         String colunas[] = {"Endereço", "Valor"};
-        String dados[][] = {
-            {"101", "Neymar"}, 
-            {"101", "Neymar"},
-            {"101", "Neymar"},
-            {"101", "Neymar"},
-            {"101", "Neymar"},
-            {"101", "Neymar"},
-            {"102", "Ronaldo"}
-        };
         
-        DefaultTableModel model = new DefaultTableModel(dados, colunas);
+        Dados dados = new Dados();
+        Memoria memoria = new Memoria();
+        
+        DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria.getMemoria()), colunas);
         jTable1.setModel(model);
     }
 
