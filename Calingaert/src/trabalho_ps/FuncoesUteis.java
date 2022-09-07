@@ -54,19 +54,19 @@ public class FuncoesUteis {
         return new String(inverso);
     }
 
-    public static void imprimeInterfaceFinal(javax.swing.JTextPane painel, String caminho) throws FileNotFoundException, IOException {
-        ArrayList<String> decimais = new ArrayList<>();
+    public static void imprimeInterfaceFinal(javax.swing.JTextPane painel, String caminho, String[] memoria) throws FileNotFoundException, IOException {
+        ArrayList<String> binarios = new ArrayList<>();
         BufferedReader buffRead = new BufferedReader(new FileReader(caminho));
         String linha = buffRead.readLine();
         while (linha != null) {
             for (String s : linha.split(" ")) {
                 int val = Integer.parseInt(s);
-                decimais.add(intToBinaryString(val, 16));
+                binarios.add(intToBinaryString(val, 16));
             }
             painel.setText(painel.getText() + "\n" + linha);
             linha = buffRead.readLine();
         }
-        painel.setText(painel.getText() + "\n\n" + String.join("\n", decimais));
+        painel.setText(painel.getText() + "\n\n" + String.join("\n", binarios));
 
     }
 }
