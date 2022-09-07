@@ -1,10 +1,7 @@
+package trabalho_ps;
+
 
 import java.util.ArrayList;
-
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 /**
  *
@@ -12,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Memoria {
     private ArrayList<String> memoria;
-    private final int TAMANHO_PILHA = 10;
+    private final int TAMANHO_PILHA = 5;
     private final int TAMANHO_MEMORIA = 512;
     private int ponteiroPilha;
     private final int INICIO_INS_DADOS = 12;

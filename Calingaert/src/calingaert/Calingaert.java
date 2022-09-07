@@ -1,9 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Main.java to edit this template
- */
 package calingaert;
 
+import java.awt.BorderLayout;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFrame;
+import trabalho_ps.FuncoesUteis;
+import javax.swing.JTextPane;
 /**
  *
  * @author gusta
@@ -14,7 +17,21 @@ public class Calingaert {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        JFrame frame = new JFrame();
+        frame.setSize(300, 300);
+        frame.setVisible(true);
+        
+        
+        JTextPane painel = new JTextPane();
+        frame.getContentPane().add(BorderLayout.CENTER, painel);
+        String caminho = "../programa.txt";
+        try {
+            FuncoesUteis.imprimeInterfaceFinal(painel, caminho);
+            
+            // TODO code application logic here
+        } catch (IOException ex) {
+            Logger.getLogger(Calingaert.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
