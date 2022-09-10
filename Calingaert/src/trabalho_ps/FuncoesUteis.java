@@ -1,11 +1,4 @@
 package trabalho_ps;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-
 /**
  *
  * @author gusta
@@ -44,7 +37,6 @@ public class FuncoesUteis {
 //        return valor.toString();
 //
 //    }
-
     private static String inverteBits(String binario) {
         char[] inverso = new char[binario.length()];
 
@@ -52,21 +44,5 @@ public class FuncoesUteis {
             inverso[i] = (binario.charAt(i) == '1') ? '0' : '1'; // se for 0, vira 1, e vice-versa
         }
         return new String(inverso);
-    }
-
-    public static void imprimeInterfaceFinal(javax.swing.JTextPane painel, String caminho, String[] memoria) throws FileNotFoundException, IOException {
-        ArrayList<String> binarios = new ArrayList<>();
-        BufferedReader buffRead = new BufferedReader(new FileReader(caminho));
-        String linha = buffRead.readLine();
-        while (linha != null) {
-            for (String s : linha.split(" ")) {
-                int val = Integer.parseInt(s);
-                binarios.add(intToBinaryString(val, 16));
-            }
-            painel.setText(painel.getText() + "\n" + linha);
-            linha = buffRead.readLine();
-        }
-        painel.setText(painel.getText() + "\n\n" + String.join("\n", binarios));
-
     }
 }

@@ -15,38 +15,47 @@ import trabalho_ps.Registradores;
  * @author junio
  */
 public class Tela extends javax.swing.JFrame {
-    
+
     /**
      * Creates new form Tela
      */
-    
     public Registradores registradores;
     public Memoria memoria;
-    
+
     public Tela(Registradores registradores, Memoria memoria) {
         this.registradores = registradores;
         this.memoria = memoria;
-        
+
         initComponents();
+        console.setEditable(false);
     }
-    
+
+    public int lerTeclado() {
+        String input = JOptionPane.showInputDialog(this, "Input");
+        return Integer.parseInt(input);
+    }
+
+    public void escreveConsole(int valor) {
+        console.append(Integer.toString(valor) + "\n");
+    }
+
     public void preencheTabela(Memoria memoria) {
         String colunas[] = {"Endereço", "Valor"};
-        
+
         Dados dados = new Dados();
-        
+
         DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria), colunas);
-        jTable1.setModel(model);
+        tabelaMemoria.setModel(model);
     }
-    
+
     public void preencheTabelaRegistradores(Registradores registradores) {
         String colunas[] = {"Registrador", "Valor"};
-        
+
         Dados dados = new Dados();
-        
+
         DefaultTableModel model = new DefaultTableModel(dados.criaMatrizRegistradores(registradores), colunas);
-        
-        jTable2.setModel(model);
+
+        tabelaRegistradores.setModel(model);
     }
 
     /**
@@ -58,24 +67,30 @@ public class Tela extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jScrollPane8 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        modoOperacao = new javax.swing.ButtonGroup();
+        botaoExecutar = new javax.swing.JButton();
+        tabelaMemoriaScroll = new javax.swing.JScrollPane();
+        tabelaMemoria = new javax.swing.JTable();
+        tabelaRegistradoresScroll = new javax.swing.JScrollPane();
+        tabelaRegistradores = new javax.swing.JTable();
+        modoStep = new javax.swing.JRadioButton();
+        modoContinuo = new javax.swing.JRadioButton();
+        modoIntervalo = new javax.swing.JRadioButton();
+        consoleScroll = new javax.swing.JScrollPane();
+        console = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton1.setBackground(new java.awt.Color(0, 255, 255));
-        jButton1.setForeground(new java.awt.Color(0, 0, 0));
-        jButton1.setText("CLIQUE AQUI");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        botaoExecutar.setBackground(new java.awt.Color(0, 255, 255));
+        botaoExecutar.setForeground(new java.awt.Color(0, 0, 0));
+        botaoExecutar.setText("Prox Instrução");
+        botaoExecutar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                botaoExecutarActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaMemoria.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"", null},
                 {null, null},
@@ -86,9 +101,9 @@ public class Tela extends javax.swing.JFrame {
                 "Endereço", "Valor"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        tabelaMemoriaScroll.setViewportView(tabelaMemoria);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaRegistradores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {"", null},
                 {null, null},
@@ -101,40 +116,141 @@ public class Tela extends javax.swing.JFrame {
                 "Registradores", "Valor"
             }
         ));
-        jScrollPane8.setViewportView(jTable2);
+        tabelaRegistradoresScroll.setViewportView(tabelaRegistradores);
+
+        modoOperacao.add(modoStep);
+        modoStep.setSelected(true);
+        modoStep.setText("Manual");
+        modoStep.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modoStepActionPerformed(evt);
+            }
+        });
+
+        modoOperacao.add(modoContinuo);
+        modoContinuo.setText("Contínuo");
+        modoContinuo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modoContinuoActionPerformed(evt);
+            }
+        });
+
+        modoOperacao.add(modoIntervalo);
+        modoIntervalo.setText("Depuração");
+        modoIntervalo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modoIntervaloActionPerformed(evt);
+            }
+        });
+
+        console.setColumns(20);
+        console.setRows(5);
+        consoleScroll.setViewportView(console);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(81, 81, 81)
-                .addComponent(jButton1)
-                .addGap(129, 129, 129)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(122, 122, 122)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(botaoExecutar)
+                            .addComponent(modoStep)
+                            .addComponent(modoContinuo)
+                            .addComponent(modoIntervalo))
+                        .addGap(27, 27, 27)
+                        .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(292, 292, 292))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)))
+                .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(65, 65, 65)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
-                .addContainerGap(439, Short.MAX_VALUE))
+                .addGap(41, 41, 41)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(modoStep)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(modoContinuo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(modoIntervalo)
+                                .addGap(18, 18, 18)
+                                .addComponent(botaoExecutar))
+                            .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(273, 273, 273)
+                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(368, 368, 368))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        Instrucoes.getInstrucao(this.registradores, this.memoria);
+    private void botaoExecutarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExecutarActionPerformed
+        int mop = this.registradores.getMOP();
+
+        switch (mop) {
+            case 0 -> {
+                Instrucoes.getInstrucao(this);
+                this.preencheTabelaRegistradores(registradores);
+                this.preencheTabela(this.memoria);
+            }
+            case 1 -> {
+                while (Instrucoes.getInstrucao(this) != 0) {
+
+                }
+                this.preencheTabelaRegistradores(registradores);
+                this.preencheTabela(this.memoria);
+            }
+            case 2 -> {
+//                ActionListener taskPerformer = new ActionListener() {
+//                    public void actionPerformed(ActionEvent evt) {
+//                    }
+//                };
+//                Timer timer = new Timer(5000, taskPerformer);
+//                timer.setRepeats(false);
+//                
+//                while(Instrucoes.getInstrucao(this.registradores, this.memoria, this) != 0) {
+//                    this.preencheTabelaRegistradores(registradores);
+//                    this.preencheTabela(this.memoria);
+//                    timer.start();
+//                }
+            }
+
+            default -> {
+                return;
+            }
+        }
+    }//GEN-LAST:event_botaoExecutarActionPerformed
+
+    private void modoStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoStepActionPerformed
+        this.registradores.setMOP(0);
         this.preencheTabelaRegistradores(registradores);
-        this.preencheTabela(this.memoria);
-    }//GEN-LAST:event_jButton1ActionPerformed
+        botaoExecutar.setLabel("Prox Instrução");
+    }//GEN-LAST:event_modoStepActionPerformed
+
+    private void modoContinuoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoContinuoActionPerformed
+        this.registradores.setMOP(1);
+        this.preencheTabelaRegistradores(registradores);
+        botaoExecutar.setLabel("Executar");
+    }//GEN-LAST:event_modoContinuoActionPerformed
+
+    private void modoIntervaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoIntervaloActionPerformed
+        this.registradores.setMOP(2);
+        this.preencheTabelaRegistradores(registradores);
+        botaoExecutar.setLabel("Executar");
+    }//GEN-LAST:event_modoIntervaloActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,15 +268,17 @@ public class Tela extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Tela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Tela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Tela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Tela.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new Tela().setVisible(true);
+//            }
+//        });
+        
         //</editor-fold>
 
         /* Create and display the form */
@@ -172,10 +290,16 @@ public class Tela extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JButton botaoExecutar;
+    private javax.swing.JTextArea console;
+    private javax.swing.JScrollPane consoleScroll;
+    private javax.swing.JRadioButton modoContinuo;
+    private javax.swing.JRadioButton modoIntervalo;
+    private javax.swing.ButtonGroup modoOperacao;
+    private javax.swing.JRadioButton modoStep;
+    private javax.swing.JTable tabelaMemoria;
+    private javax.swing.JScrollPane tabelaMemoriaScroll;
+    private javax.swing.JTable tabelaRegistradores;
+    private javax.swing.JScrollPane tabelaRegistradoresScroll;
     // End of variables declaration//GEN-END:variables
 }
