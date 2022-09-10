@@ -39,11 +39,11 @@ public class FuncoesUteis {
         }
     }
 
-    public static String registradorDisplay(Registrador reg) {
-        Integer valor = FuncoesUteis.binaryStringToInt(reg.get());
-        return valor.toString();
-
-    }
+//    public static String registradorDisplay(Registrador reg) {;
+//        Integer valor = FuncoesUteis.binaryStringToInt(reg.get());
+//        return valor.toString();
+//
+//    }
 
     private static String inverteBits(String binario) {
         char[] inverso = new char[binario.length()];

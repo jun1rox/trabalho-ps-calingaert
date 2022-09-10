@@ -73,4 +73,19 @@ public class Memoria {
             linha = buffRead.readLine();
         }
     }
+    
+    public int getMemoriaDiretaInt(int local) {
+        int address = this.getMemoriaPosicaoInt(local);
+        return this.getMemoriaPosicaoInt(address);
+    }
+    
+    public int getMemoriaIndiretaInt(int local) {
+        int address = this.getMemoriaPosicaoInt(local);
+        address = this.getMemoriaPosicaoInt(address);
+        return this.getMemoriaPosicaoInt(address);
+    }
+    
+    public int getMemoriaImediataInt(int local) {
+        return this.getMemoriaPosicaoInt(local);
+    }
 }

@@ -8,7 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import trabalho_ps.Instrucoes;
 import trabalho_ps.Memoria;
-import trabalho_ps.Registrador;
+import trabalho_ps.Registradores;
 
 /**
  *
@@ -20,11 +20,11 @@ public class Tela extends javax.swing.JFrame {
      * Creates new form Tela
      */
     
-    public Registrador PC;
+    public Registradores registradores;
     public Memoria memoria;
     
-    public Tela(Registrador PC, Memoria memoria) {
-        this.PC = PC;
+    public Tela(Registradores registradores, Memoria memoria) {
+        this.registradores = registradores;
         this.memoria = memoria;
         
         initComponents();
@@ -37,6 +37,16 @@ public class Tela extends javax.swing.JFrame {
         
         DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria), colunas);
         jTable1.setModel(model);
+    }
+    
+    public void preencheTabelaRegistradores(Registradores registradores) {
+        String colunas[] = {"Registrador", "Valor"};
+        
+        Dados dados = new Dados();
+        
+        DefaultTableModel model = new DefaultTableModel(dados.criaMatrizRegistradores(registradores), colunas);
+        
+        jTable2.setModel(model);
     }
 
     /**
@@ -51,10 +61,8 @@ public class Tela extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -80,26 +88,31 @@ public class Tela extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jScrollPane2.setViewportView(jTextPane1);
-
-        jScrollPane3.setViewportView(jTextPane2);
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"", null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Registradores", "Valor"
+            }
+        ));
+        jScrollPane8.setViewportView(jTable2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(81, 81, 81)
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(96, 96, 96)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(86, 86, 86)))
+                .addGap(81, 81, 81)
+                .addComponent(jButton1)
+                .addGap(129, 129, 129)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(122, 122, 122)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(35, 35, 35))
         );
@@ -108,22 +121,19 @@ public class Tela extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(65, 65, 65)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addGap(139, 139, 139)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(101, Short.MAX_VALUE))
+                    .addComponent(jButton1))
+                .addContainerGap(439, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        jTextPane1.setText(Instrucoes.getInstrucao(this.PC, this.memoria));
-        jTextPane2.setText(Integer.toString(PC.getValorInt()));
+        Instrucoes.getInstrucao(this.registradores, this.memoria);
+        this.preencheTabelaRegistradores(registradores);
+        this.preencheTabela(this.memoria);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
@@ -164,10 +174,8 @@ public class Tela extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane jTextPane2;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

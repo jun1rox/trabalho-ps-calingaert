@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import trabalho_ps.Memoria;
-import trabalho_ps.Registrador;
 import trabalho_ps.FuncoesUteis;
+import trabalho_ps.Registradores;
 
 /**
  *
@@ -20,13 +20,9 @@ public class Calingaert {
     public static void main(String[] args) {
         
         Memoria memoria = new Memoria();
-        String valor_pc = FuncoesUteis.intToBinaryString(memoria.getINICIO_INS_DADOS(), 16);
-        Registrador PC = new Registrador(valor_pc);
-        Registrador ACC = new Registrador();
-        Registrador SP = new Registrador();
-        Registrador MOP = new Registrador();
-        Registrador RI = new Registrador();
-        Registrador RE = new Registrador();
+        int valor_pc = memoria.getINICIO_INS_DADOS();
+        Registradores registradores = new Registradores();
+        registradores.setPC(valor_pc);
         String caminho = "../programa.txt";
         
         try {
@@ -35,9 +31,10 @@ public class Calingaert {
             Logger.getLogger(Calingaert.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        Tela tela = new Tela(PC, memoria);
+        Tela tela = new Tela(registradores, memoria);
         
         tela.preencheTabela(memoria);
+        tela.preencheTabelaRegistradores(registradores);
         tela.setVisible(true);
 
     }
