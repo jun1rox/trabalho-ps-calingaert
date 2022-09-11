@@ -1,6 +1,4 @@
 /Calingaert/build/
 /Calingaert/dist/
 
-.properties
-
-private.xml
+nbproject/private
