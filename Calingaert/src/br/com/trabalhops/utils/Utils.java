@@ -1,10 +1,10 @@
-package br.com.trabalhops.maquinavirtual;
+package br.com.trabalhops.utils;
 
 /**
  *
  * @author gusta
  */
-public class UtilsImpl implements UtilsInterface {
+public class Utils implements UtilsInterface {
 
     @Override
     public int binaryStringToInt(String binario) {

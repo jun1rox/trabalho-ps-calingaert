@@ -1,4 +1,4 @@
-package br.com.trabalhops.maquinavirtual;
+package br.com.trabalhops.utils;
 
 /**
  *
