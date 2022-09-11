@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import br.com.trabalhops.maquinavirtual.Memoria;
 import br.com.trabalhops.maquinavirtual.Registradores;
+import java.awt.Color;
 
 /**
  *
@@ -31,6 +32,8 @@ public class Calingaert {
         tela.setTitle("Calingaert - g²");
         tela.preencheTabela(memoria);
         tela.preencheTabelaRegistradores(registradores);
+        tela.setResizable(false);
+        tela.getContentPane().setBackground(new Color(51, 204, 255));
         tela.setVisible(true);
     }
 

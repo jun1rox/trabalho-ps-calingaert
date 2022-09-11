@@ -75,8 +75,10 @@ public class Tela extends javax.swing.JFrame {
         console = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(51, 204, 255));
+        setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        botaoExecutar.setBackground(new java.awt.Color(0, 255, 255));
+        botaoExecutar.setBackground(new java.awt.Color(255, 255, 255));
         botaoExecutar.setForeground(new java.awt.Color(0, 0, 0));
         botaoExecutar.setText("Prox Instrução");
         botaoExecutar.addActionListener(new java.awt.event.ActionListener() {
@@ -113,6 +115,7 @@ public class Tela extends javax.swing.JFrame {
         ));
         tabelaRegistradoresScroll.setViewportView(tabelaRegistradores);
 
+        modoStep.setBackground(new java.awt.Color(51, 204, 255));
         modoOperacao.add(modoStep);
         modoStep.setSelected(true);
         modoStep.setText("Manual");
@@ -122,6 +125,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+        modoContinuo.setBackground(new java.awt.Color(51, 204, 255));
         modoOperacao.add(modoContinuo);
         modoContinuo.setText("Contínuo");
         modoContinuo.addActionListener(new java.awt.event.ActionListener() {
@@ -130,6 +134,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+        modoIntervalo.setBackground(new java.awt.Color(51, 204, 255));
         modoOperacao.add(modoIntervalo);
         modoIntervalo.setText("Depuração");
         modoIntervalo.addActionListener(new java.awt.event.ActionListener() {
@@ -147,33 +152,29 @@ public class Tela extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(46, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(botaoExecutar)
                             .addComponent(modoStep)
                             .addComponent(modoContinuo)
-                            .addComponent(modoIntervalo))
-                        .addGap(27, 27, 27)
-                        .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(292, 292, 292))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 733, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 64, Short.MAX_VALUE)))
+                            .addComponent(modoIntervalo)
+                            .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(48, 48, 48)
+                        .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(consoleScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
                 .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
+                .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(41, 41, 41)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(modoStep)
@@ -184,9 +185,9 @@ public class Tela extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(botaoExecutar))
                             .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(273, 273, 273)
-                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(368, 368, 368))))
+                        .addGap(86, 86, 86)
+                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
