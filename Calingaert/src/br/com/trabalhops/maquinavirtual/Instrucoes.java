@@ -23,20 +23,20 @@ public class Instrucoes implements InstrucoesInterface {
 
             // BR
             case 0 -> { // direto
-                int val_1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
+                int val_1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 registradores.setPC(val_1);
                 return 1;
             }
 
             case 32 -> { // indireto
-                int val_1 = memoria.getMemoriaIndiretaInt(pos_instrucao + 1);
+                int val_1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 registradores.setPC(val_1);
                 return 1;
             }
 
             // BRPOS
             case 1 -> { // direto
-                int val_1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
+                int val_1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 if (registradores.getACC() > 0) {
                     registradores.setPC(val_1);
                 } else {
@@ -46,7 +46,7 @@ public class Instrucoes implements InstrucoesInterface {
             }
 
             case 33 -> { // indireto
-                int val_1 = memoria.getMemoriaIndiretaInt(pos_instrucao + 1);
+                int val_1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 if (registradores.getACC() > 0) {
                     registradores.setPC(val_1);
                 } else {
@@ -104,7 +104,7 @@ public class Instrucoes implements InstrucoesInterface {
 
             // BRZERO
             case 4 -> { // direto
-                int val_1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
+                int val_1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 if (registradores.getACC() == 0) {
                     registradores.setPC(val_1);
                 } else {
@@ -114,7 +114,7 @@ public class Instrucoes implements InstrucoesInterface {
             }
 
             case 36 -> { // indireto
-                int val_1 = memoria.getMemoriaIndiretaInt(pos_instrucao + 1);
+                int val_1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 if (registradores.getACC() == 0) {
                     registradores.setPC(val_1);
                 } else {
@@ -125,7 +125,7 @@ public class Instrucoes implements InstrucoesInterface {
 
             // BRNEG
             case 5 -> { // direto
-                op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
+                op1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 if (registradores.getACC() == 0) {
                     registradores.setPC(op1);
                 }
@@ -134,7 +134,7 @@ public class Instrucoes implements InstrucoesInterface {
             }
 
             case 37 -> { // indireto
-                op1 = memoria.getMemoriaIndiretaInt(pos_instrucao + 1);
+                op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 if (registradores.getACC() == 0) {
                     registradores.setPC(op1);
                 }
@@ -169,7 +169,7 @@ public class Instrucoes implements InstrucoesInterface {
 
             // STORE
             case 7 -> { // direto
-                op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
+                op1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 int acc = registradores.getACC();
                 memoria.setMemoriaPosicao(op1, utils.intToBinaryString(acc, 16));
                 registradores.addPC(2);
@@ -177,7 +177,7 @@ public class Instrucoes implements InstrucoesInterface {
             }
 
             case 39 -> { // indireto
-                op1 = memoria.getMemoriaIndiretaInt(pos_instrucao + 1);
+                op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 int acc = registradores.getACC();
                 memoria.setMemoriaPosicao(op1, utils.intToBinaryString(acc, 16));
                 registradores.addPC(2);
