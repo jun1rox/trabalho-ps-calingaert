@@ -1,6 +1,6 @@
-package trabalho_ps;
+package br.com.trabalhops.maquinavirtual;
 
-import gui.Tela;
+import br.com.trabalhops.gui.Tela;
 
 /**
  *

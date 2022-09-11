@@ -1,11 +1,11 @@
-package calingaert;
+package br.com.trabalhops.calingaert;
 
-import gui.Tela;
+import br.com.trabalhops.gui.Tela;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import trabalho_ps.Memoria;
-import trabalho_ps.Registradores;
+import br.com.trabalhops.maquinavirtual.Memoria;
+import br.com.trabalhops.maquinavirtual.Registradores;
 
 /**
  *

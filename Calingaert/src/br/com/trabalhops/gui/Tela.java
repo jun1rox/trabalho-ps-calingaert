@@ -1,10 +1,10 @@
-package gui;
+package br.com.trabalhops.gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import trabalho_ps.Instrucoes;
-import trabalho_ps.Memoria;
-import trabalho_ps.Registradores;
+import br.com.trabalhops.maquinavirtual.Instrucoes;
+import br.com.trabalhops.maquinavirtual.Memoria;
+import br.com.trabalhops.maquinavirtual.Registradores;
 
 /**
  *

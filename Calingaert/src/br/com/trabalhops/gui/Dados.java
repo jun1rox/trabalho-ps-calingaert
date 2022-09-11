@@ -1,7 +1,7 @@
-package gui;
+package br.com.trabalhops.gui;
 
-import trabalho_ps.Memoria;
-import trabalho_ps.Registradores;
+import br.com.trabalhops.maquinavirtual.Memoria;
+import br.com.trabalhops.maquinavirtual.Registradores;
 
 /**
  * RECEBE UM ARRAY DE STRING E MANDA COM O INDICE PARA A TABELA

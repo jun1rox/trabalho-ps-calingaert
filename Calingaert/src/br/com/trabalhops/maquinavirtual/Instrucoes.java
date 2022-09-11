@@ -1,6 +1,6 @@
-package trabalho_ps;
+package br.com.trabalhops.maquinavirtual;
 
-import gui.Tela;
+import br.com.trabalhops.gui.Tela;
 
 /**
  *
@@ -8,7 +8,7 @@ import gui.Tela;
  */
 public class Instrucoes implements InstrucoesInterface {
 
-    private final FuncoesUteis utils = new FuncoesUteis();
+    private final UtilsImpl utils = new UtilsImpl();
 
     @Override
     public int getInstrucao(Tela tela) {

@@ -1,10 +1,10 @@
-package trabalho_ps;
+package br.com.trabalhops.maquinavirtual;
 
 /**
  *
  * @author gu_fe
  */
-public interface FuncoesUteisInterface {
+public interface UtilsInterface {
 
     public int binaryStringToInt(String binario);
 

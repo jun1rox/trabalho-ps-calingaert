@@ -1,4 +1,4 @@
-package trabalho_ps;
+package br.com.trabalhops.maquinavirtual;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -12,7 +12,7 @@ import java.util.Arrays;
  */
 public class Memoria {
 
-    private final FuncoesUteis utils = new FuncoesUteis();
+    private final UtilsImpl utils = new UtilsImpl();
 
     private final String[] memoria;
     private final String TAMANHO_PILHA = "0000000000000101";

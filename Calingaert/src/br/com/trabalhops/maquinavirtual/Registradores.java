@@ -1,4 +1,4 @@
-package trabalho_ps;
+package br.com.trabalhops.maquinavirtual;
 
 /**
  *
