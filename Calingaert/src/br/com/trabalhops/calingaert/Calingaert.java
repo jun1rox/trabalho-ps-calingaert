@@ -19,7 +19,7 @@ public class Calingaert {
         int valor_pc = memoria.getINICIO_INS_DADOS();
         Registradores registradores = new Registradores();
         registradores.setPC(valor_pc);
-        String caminho = "../programa.txt";
+        String caminho = "../fibonacci.txt";
 
         try {
             memoria.carregaPrograma(caminho);
