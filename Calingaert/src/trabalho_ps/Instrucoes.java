@@ -1,21 +1,22 @@
 package trabalho_ps;
 
 import gui.Tela;
-import static trabalho_ps.FuncoesUteis.binaryStringToInt;
-import static trabalho_ps.FuncoesUteis.intToBinaryString;
 
 /**
  *
  * @author Franco
  */
-public class Instrucoes {
+public class Instrucoes implements InstrucoesInterface {
 
-    public static int getInstrucao(Tela tela) {
+    private final FuncoesUteis utils = new FuncoesUteis();
+
+    @Override
+    public int getInstrucao(Tela tela) {
         Memoria memoria = tela.memoria;
         Registradores registradores = tela.registradores;
         int op1;
         int pos_instrucao = registradores.getPC();
-        int instrucao = binaryStringToInt(memoria.getMemoriaPosicao(pos_instrucao));
+        int instrucao = utils.binaryStringToInt(memoria.getMemoriaPosicao(pos_instrucao));
         registradores.setRI(instrucao);
         switch (instrucao) {
 
@@ -169,7 +170,7 @@ public class Instrucoes {
             case 7 -> { // direto
                 op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 int acc = registradores.getACC();
-                memoria.setMemoriaPosicao(op1, intToBinaryString(acc, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(acc, 16));
                 registradores.addPC(2);
                 return 1;
             }
@@ -177,7 +178,7 @@ public class Instrucoes {
             case 39 -> { // indireto
                 op1 = memoria.getMemoriaIndiretaInt(pos_instrucao + 1);
                 int acc = registradores.getACC();
-                memoria.setMemoriaPosicao(op1, intToBinaryString(acc, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(acc, 16));
                 registradores.addPC(2);
                 return 1;
             }
@@ -244,7 +245,7 @@ public class Instrucoes {
             case 12 -> { // direto
                 op1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 int input = tela.lerTeclado();
-                memoria.setMemoriaPosicao(op1, intToBinaryString(input, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(input, 16));
                 registradores.addPC(2);
                 return 1;
             }
@@ -252,7 +253,7 @@ public class Instrucoes {
             case 44 -> { // indireto
                 op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 int input = tela.lerTeclado();
-                memoria.setMemoriaPosicao(op1, intToBinaryString(input, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(input, 16));
                 registradores.addPC(2);
                 return 1;
             }
@@ -261,7 +262,7 @@ public class Instrucoes {
             case 13 -> { // op1 direto op2 direto
                 op1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 int val_2 = memoria.getMemoriaDiretaInt(pos_instrucao + 2);
-                memoria.setMemoriaPosicao(op1, intToBinaryString(val_2, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(val_2, 16));
                 registradores.addPC(3);
                 return 1;
             }
@@ -269,7 +270,7 @@ public class Instrucoes {
             case 77 -> { // op1 direto op2 indireto
                 op1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 int val_2 = memoria.getMemoriaIndiretaInt(pos_instrucao + 2);
-                memoria.setMemoriaPosicao(op1, intToBinaryString(val_2, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(val_2, 16));
                 registradores.addPC(3);
                 return 1;
             }
@@ -277,7 +278,7 @@ public class Instrucoes {
             case 141 -> { // op1 direto op2 imediato
                 op1 = memoria.getMemoriaPosicaoInt(pos_instrucao + 1);
                 int val_2 = memoria.getMemoriaImediataInt(pos_instrucao + 2);
-                memoria.setMemoriaPosicao(op1, intToBinaryString(val_2, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(val_2, 16));
                 registradores.addPC(3);
                 return 1;
             }
@@ -285,7 +286,7 @@ public class Instrucoes {
             case 45 -> { // op1 indireto op2 direto
                 op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 int val_2 = memoria.getMemoriaDiretaInt(pos_instrucao + 2);
-                memoria.setMemoriaPosicao(op1, intToBinaryString(val_2, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(val_2, 16));
                 registradores.addPC(3);
                 return 1;
             }
@@ -293,7 +294,7 @@ public class Instrucoes {
             case 109 -> { // op1 indireto op2 indireto
                 op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 int val_2 = memoria.getMemoriaIndiretaInt(pos_instrucao + 2);
-                memoria.setMemoriaPosicao(op1, intToBinaryString(val_2, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(val_2, 16));
                 registradores.addPC(3);
                 return 1;
             }
@@ -301,7 +302,7 @@ public class Instrucoes {
             case 173 -> { // op1 indireto op2 imediato
                 op1 = memoria.getMemoriaDiretaInt(pos_instrucao + 1);
                 int val_2 = memoria.getMemoriaImediataInt(pos_instrucao + 2);
-                memoria.setMemoriaPosicao(op1, intToBinaryString(val_2, 16));
+                memoria.setMemoriaPosicao(op1, utils.intToBinaryString(val_2, 16));
                 registradores.addPC(3);
                 return 1;
             }

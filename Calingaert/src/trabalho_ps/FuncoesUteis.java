@@ -1,21 +1,23 @@
 package trabalho_ps;
+
 /**
  *
  * @author gusta
  */
-public class FuncoesUteis {
+public class FuncoesUteis implements FuncoesUteisInterface {
 
-    public static int binaryStringToInt(String binario) {
-        if (binario.charAt(0) == '1') // numero negativo -> aplicar complemento de 2
-        // inverte bits -> soma 1 -> poe sinal negativo
-        {
-            return -(Integer.parseInt(inverteBits(binario), 2) + 1);
+    @Override
+    public int binaryStringToInt(String binario) {
+        if (binario.charAt(0) == '1') { // numero negativo -> aplicar complemento de 2
+            // inverte bits -> soma 1 -> poe sinal negativo
+            return -(Integer.parseInt(this.inverteBits(binario), 2) + 1);
         } else {
             return Integer.parseInt(binario, 2);
         }
     }
 
-    public static String intToBinaryString(int numero, int tamanho) {
+    @Override
+    public String intToBinaryString(int numero, int tamanho) {
         String saida = Integer.toBinaryString(numero); // essa função já trata o complemento de dois
         tamanho -= saida.length();
         if (tamanho > 0) {
@@ -32,12 +34,7 @@ public class FuncoesUteis {
         }
     }
 
-//    public static String registradorDisplay(Registrador reg) {;
-//        Integer valor = FuncoesUteis.binaryStringToInt(reg.get());
-//        return valor.toString();
-//
-//    }
-    private static String inverteBits(String binario) {
+    private String inverteBits(String binario) {
         char[] inverso = new char[binario.length()];
 
         for (int i = 0; i < inverso.length; i++) {
@@ -45,4 +42,5 @@ public class FuncoesUteis {
         }
         return new String(inverso);
     }
+
 }

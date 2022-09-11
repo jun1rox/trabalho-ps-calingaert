@@ -4,18 +4,16 @@ import trabalho_ps.Memoria;
 import trabalho_ps.Registradores;
 
 /**
+ * RECEBE UM ARRAY DE STRING E MANDA COM O INDICE PARA A TABELA
  *
  * @author junio
  */
 public class Dados {
-    // RECEBE UM ARRAY DE STRING E MANDA COM O INDICE PARA A TABELA
 
     public Dados() {
-
     }
 
     public String[][] criaMatriz(Memoria memoria) {
-
         String[][] dados = new String[512][2];
 
         int tamanho = memoria.getTAMANHO_MEMORIA();
@@ -31,7 +29,6 @@ public class Dados {
     }
 
     public String[][] criaMatrizRegistradores(Registradores registradores) {
-
         String[][] dados = new String[6][2];
 
         dados[0][0] = "PC";
@@ -49,4 +46,5 @@ public class Dados {
 
         return dados;
     }
+    
 }

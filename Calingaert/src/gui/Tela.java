@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package gui;
 
 import javax.swing.JOptionPane;
@@ -16,9 +12,8 @@ import trabalho_ps.Registradores;
  */
 public class Tela extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Tela
-     */
+    private final Instrucoes instrucoes = new Instrucoes();
+
     public Registradores registradores;
     public Memoria memoria;
 
@@ -202,12 +197,12 @@ public class Tela extends javax.swing.JFrame {
 
         switch (mop) {
             case 0 -> {
-                Instrucoes.getInstrucao(this);
+                instrucoes.getInstrucao(this);
                 this.preencheTabelaRegistradores(registradores);
                 this.preencheTabela(this.memoria);
             }
             case 1 -> {
-                while (Instrucoes.getInstrucao(this) != 0) {
+                while (instrucoes.getInstrucao(this) != 0) {
 
                 }
                 this.preencheTabelaRegistradores(registradores);
@@ -237,19 +232,19 @@ public class Tela extends javax.swing.JFrame {
     private void modoStepActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoStepActionPerformed
         this.registradores.setMOP(0);
         this.preencheTabelaRegistradores(registradores);
-        botaoExecutar.setLabel("Prox Instrução");
+        botaoExecutar.setText("Prox Instrução");
     }//GEN-LAST:event_modoStepActionPerformed
 
     private void modoContinuoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoContinuoActionPerformed
         this.registradores.setMOP(1);
         this.preencheTabelaRegistradores(registradores);
-        botaoExecutar.setLabel("Executar");
+        botaoExecutar.setText("Executar");
     }//GEN-LAST:event_modoContinuoActionPerformed
 
     private void modoIntervaloActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modoIntervaloActionPerformed
         this.registradores.setMOP(2);
         this.preencheTabelaRegistradores(registradores);
-        botaoExecutar.setLabel("Executar");
+        botaoExecutar.setText("Executar");
     }//GEN-LAST:event_modoIntervaloActionPerformed
 
     /**
@@ -278,7 +273,7 @@ public class Tela extends javax.swing.JFrame {
 //                new Tela().setVisible(true);
 //            }
 //        });
-        
+
         //</editor-fold>
 
         /* Create and display the form */
