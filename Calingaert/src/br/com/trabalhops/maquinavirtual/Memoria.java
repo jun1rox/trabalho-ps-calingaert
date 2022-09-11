@@ -15,22 +15,21 @@ public class Memoria {
 
     private final Utils utils = new Utils();
 
-    private final String[] memoria;
+    private final String[] dados;
     private final String TAMANHO_PILHA = "0000000000000101";
     private final int TAMANHO_MEMORIA = 512;
     private final int INICIO_INS_DADOS = 7;
-//    private final int ponteiroPilha;
 
     public Memoria() {
-        this.memoria = new String[this.TAMANHO_MEMORIA];
+        this.dados = new String[this.TAMANHO_MEMORIA];
 //        this.ponteiroPilha = 3;
 
-        Arrays.fill(this.memoria, "0000000000000000");
-        this.memoria[1] = this.TAMANHO_PILHA; //segunda posição da memória
+        Arrays.fill(this.dados, "0000000000000000");
+        this.dados[1] = this.TAMANHO_PILHA; //segunda posição da memória
     }
 
-    public String[] getMemoria() { //ve a memoria inteira
-        return this.memoria;
+    public String[] getDados() { //ve a dados inteira
+        return this.dados;
     }
 
     //Pode ser usado para setar o primeiro valor de PC
@@ -40,12 +39,12 @@ public class Memoria {
 
     //escolhe uma posição da memória(int) e atualiza ela com uma novo valor(string)
     public void setMemoriaPosicao(int local, String valor) {
-        this.memoria[local] = valor;
+        this.dados[local] = valor;
     }
 
     //Retorna uma posição da memória
     public String getMemoriaPosicao(int local) {
-        return this.memoria[local];
+        return this.dados[local];
     }
 
     // Retorna uma posição da memória, convertido para inteiro
@@ -64,7 +63,7 @@ public class Memoria {
         while (linha != null) {
             for (String s : linha.split(" ")) {
                 int val = Integer.parseInt(s);
-                this.memoria[i] = utils.intToBinaryString(val, 16);
+                this.dados[i] = utils.intToBinaryString(val, 16);
                 i++;
             }
             linha = buffRead.readLine();

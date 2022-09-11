@@ -33,7 +33,7 @@ public class Calingaert {
         tela.preencheTabela(memoria);
         tela.preencheTabelaRegistradores(registradores);
         tela.setResizable(false);
-        tela.getContentPane().setBackground(new Color(51, 204, 255));
+        tela.getContentPane().setBackground(new Color(51, 204, 255)); 
         tela.setVisible(true);
     }
 
