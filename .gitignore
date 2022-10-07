@@ -1,4 +1,11 @@
-/Calingaert/build/
-/Calingaert/dist/
-
-nbproject/private
+### NetBeans ###
+**/nbproject/private/
+**/nbproject/Makefile-*.mk
+**/nbproject/Package-*.bash
+**/nbproject/*.properties
+**/nbproject/*.xml
+build/
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
