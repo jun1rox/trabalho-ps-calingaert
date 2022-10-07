@@ -5,6 +5,10 @@ import javax.swing.table.DefaultTableModel;
 import br.com.trabalhops.maquinavirtual.Instrucoes;
 import br.com.trabalhops.maquinavirtual.Memoria;
 import br.com.trabalhops.maquinavirtual.Registradores;
+import java.io.IOException;
+import java.util.Timer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -12,15 +16,16 @@ import br.com.trabalhops.maquinavirtual.Registradores;
  */
 public class Tela extends javax.swing.JFrame {
 
-    private final Instrucoes instrucoes = new Instrucoes();
-
+    public final Instrucoes instrucoes = new Instrucoes();
     public Registradores registradores;
     public Memoria memoria;
+    public Dados dados;
 
     public Tela(Registradores registradores, Memoria memoria) {
         this.registradores = registradores;
         this.memoria = memoria;
-
+        this.dados = new Dados();
+        
         initComponents();
         console.setEditable(false);
     }
@@ -36,17 +41,13 @@ public class Tela extends javax.swing.JFrame {
 
     public void preencheTabela(Memoria memoria) {
         String colunas[] = {"Endereço", "Valor"};
-
-        Dados dados = new Dados();
-
+            
         DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria), colunas);
         tabelaMemoria.setModel(model);
     }
 
     public void preencheTabelaRegistradores(Registradores registradores) {
         String colunas[] = {"Registrador", "Valor"};
-
-        Dados dados = new Dados();
 
         DefaultTableModel model = new DefaultTableModel(dados.criaMatrizRegistradores(registradores), colunas);
 
@@ -63,6 +64,7 @@ public class Tela extends javax.swing.JFrame {
     private void initComponents() {
 
         modoOperacao = new javax.swing.ButtonGroup();
+        jFileChooser1 = new javax.swing.JFileChooser();
         botaoExecutar = new javax.swing.JButton();
         tabelaMemoriaScroll = new javax.swing.JScrollPane();
         tabelaMemoria = new javax.swing.JTable();
@@ -73,6 +75,8 @@ public class Tela extends javax.swing.JFrame {
         modoIntervalo = new javax.swing.JRadioButton();
         consoleScroll = new javax.swing.JScrollPane();
         console = new javax.swing.JTextArea();
+        resetButton = new javax.swing.JButton();
+        toggleModoTabela = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(51, 204, 255));
@@ -147,35 +151,55 @@ public class Tela extends javax.swing.JFrame {
         console.setRows(5);
         consoleScroll.setViewportView(console);
 
+        resetButton.setText("Reset");
+        resetButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetButtonActionPerformed(evt);
+            }
+        });
+
+        toggleModoTabela.setText("Decimal");
+        toggleModoTabela.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                toggleModoTabelaStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(46, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addContainerGap(42, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(toggleModoTabela)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(modoStep)
-                            .addComponent(modoContinuo)
-                            .addComponent(modoIntervalo)
-                            .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(48, 48, 48)
-                        .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(consoleScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(resetButton)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(modoStep)
+                                        .addComponent(modoContinuo)
+                                        .addComponent(modoIntervalo)
+                                        .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(48, 48, 48)
+                                    .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(consoleScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(45, 45, 45)
+                        .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(44, 44, 44))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
+                        .addComponent(resetButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(modoStep)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -183,11 +207,13 @@ public class Tela extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(modoIntervalo)
                                 .addGap(18, 18, 18)
-                                .addComponent(botaoExecutar))
-                            .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(86, 86, 86)
-                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(botaoExecutar)))
+                        .addGap(53, 53, 53)
+                        .addComponent(consoleScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(toggleModoTabela)
+                .addContainerGap())
         );
 
         pack();
@@ -209,19 +235,9 @@ public class Tela extends javax.swing.JFrame {
                 this.preencheTabelaRegistradores(registradores);
                 this.preencheTabela(this.memoria);
             }
-            case 2 -> {
-//                ActionListener taskPerformer = new ActionListener() {
-//                    public void actionPerformed(ActionEvent evt) {
-//                    }
-//                };
-//                Timer timer = new Timer(5000, taskPerformer);
-//                timer.setRepeats(false);
-//                
-//                while(Instrucoes.getInstrucao(this.registradores, this.memoria, this) != 0) {
-//                    this.preencheTabelaRegistradores(registradores);
-//                    this.preencheTabela(this.memoria);
-//                    timer.start();
-//                }
+            case 2 -> {                
+                Timer timer = new Timer();
+                timer.schedule(new TaskDepuracao(this), 0, 10);//wait 0 ms before doing the action and do it evry 1000ms (1second)
             }
 
             default -> {
@@ -247,6 +263,25 @@ public class Tela extends javax.swing.JFrame {
         this.preencheTabelaRegistradores(registradores);
         botaoExecutar.setText("Executar");
     }//GEN-LAST:event_modoIntervaloActionPerformed
+
+    private void resetButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetButtonActionPerformed
+        memoria.resetMemoria();
+        registradores.resetRegistradores(memoria.getINICIO_INS_DADOS());
+        try {
+            memoria.carregaPrograma(memoria.programaCarregado);
+        } catch (IOException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        this.preencheTabelaRegistradores(registradores);
+        this.preencheTabela(this.memoria);
+        console.setText("");
+    }//GEN-LAST:event_resetButtonActionPerformed
+
+    private void toggleModoTabelaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_toggleModoTabelaStateChanged
+        dados.toggleDecimal();
+        this.preencheTabela(this.memoria);
+    }//GEN-LAST:event_toggleModoTabelaStateChanged
 
     /**
      * @param args the command line arguments
@@ -289,13 +324,16 @@ public class Tela extends javax.swing.JFrame {
     private javax.swing.JButton botaoExecutar;
     private javax.swing.JTextArea console;
     private javax.swing.JScrollPane consoleScroll;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JRadioButton modoContinuo;
     private javax.swing.JRadioButton modoIntervalo;
     private javax.swing.ButtonGroup modoOperacao;
     private javax.swing.JRadioButton modoStep;
+    private javax.swing.JButton resetButton;
     private javax.swing.JTable tabelaMemoria;
     private javax.swing.JScrollPane tabelaMemoriaScroll;
     private javax.swing.JTable tabelaRegistradores;
     private javax.swing.JScrollPane tabelaRegistradoresScroll;
+    private javax.swing.JToggleButton toggleModoTabela;
     // End of variables declaration//GEN-END:variables
 }

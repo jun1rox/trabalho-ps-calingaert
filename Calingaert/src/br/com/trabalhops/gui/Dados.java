@@ -1,5 +1,6 @@
 package br.com.trabalhops.gui;
 
+import br.com.trabalhops.utils.Utils;
 import br.com.trabalhops.maquinavirtual.Memoria;
 import br.com.trabalhops.maquinavirtual.Registradores;
 
@@ -10,19 +11,30 @@ import br.com.trabalhops.maquinavirtual.Registradores;
  */
 public class Dados {
 
+    public boolean decimal;
+    private final Utils utils = new Utils();
+    
     public Dados() {
+        this.decimal = false;
     }
 
+    public void toggleDecimal() {
+        decimal = !decimal;
+    }
+    
     public String[][] criaMatriz(Memoria memoria) {
         String[][] dados = new String[512][2];
 
         int tamanho = memoria.getTAMANHO_MEMORIA();
 
         for (int posicao = 0; posicao < tamanho; posicao++) {
-            // getposi
-
+            String valor = memoria.getMemoriaPosicao(posicao);
             dados[posicao][0] = Integer.toString(posicao);
-            dados[posicao][1] = memoria.getMemoriaPosicao(posicao);
+            if (decimal){
+                dados[posicao][1] = Integer.toString(utils.binaryStringToInt(valor));
+            } else {
+                dados[posicao][1] = valor;
+            }
         }
 
         return dados;

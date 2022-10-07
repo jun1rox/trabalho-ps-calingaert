@@ -7,6 +7,7 @@ import java.util.logging.Logger;
 import br.com.trabalhops.maquinavirtual.Memoria;
 import br.com.trabalhops.maquinavirtual.Registradores;
 import java.awt.Color;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -28,7 +29,9 @@ public class Calingaert {
         }
 
         Tela tela = new Tela(registradores, memoria);
-
+        
+        ImageIcon img = new ImageIcon("../calingas.png");
+        tela.setIconImage(img.getImage());
         tela.setTitle("Calingaert - g²");
         tela.preencheTabela(memoria);
         tela.preencheTabelaRegistradores(registradores);

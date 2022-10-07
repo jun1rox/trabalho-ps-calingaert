@@ -22,6 +22,14 @@ public class Registradores {
         this.RE = 0;
     }
 
+    public void resetRegistradores(int valor_pc) {
+        this.PC = valor_pc;
+        this.ACC = 0;
+        this.SP = 0;
+        this.RI = 0;
+        this.RE = 0;
+    }
+    
     public int getPC() {
         return PC;
     }

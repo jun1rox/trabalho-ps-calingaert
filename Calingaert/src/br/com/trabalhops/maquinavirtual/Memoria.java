@@ -19,15 +19,20 @@ public class Memoria {
     private final String TAMANHO_PILHA = "0000000000000101";
     private final int TAMANHO_MEMORIA = 512;
     private final int INICIO_INS_DADOS = 7;
-
+    public String programaCarregado;
+    
     public Memoria() {
         this.dados = new String[this.TAMANHO_MEMORIA];
-//        this.ponteiroPilha = 3;
 
         Arrays.fill(this.dados, "0000000000000000");
         this.dados[1] = this.TAMANHO_PILHA; //segunda posição da memória
     }
 
+    public void resetMemoria() {
+        Arrays.fill(this.dados, "0000000000000000");
+        this.dados[1] = this.TAMANHO_PILHA;
+    }
+    
     public String[] getDados() { //ve a dados inteira
         return this.dados;
     }
@@ -57,6 +62,7 @@ public class Memoria {
     }
 
     public void carregaPrograma(String caminho) throws FileNotFoundException, IOException {
+        programaCarregado = caminho;
         BufferedReader buffRead = new BufferedReader(new FileReader(caminho));
         String linha = buffRead.readLine();
         int i = this.INICIO_INS_DADOS;

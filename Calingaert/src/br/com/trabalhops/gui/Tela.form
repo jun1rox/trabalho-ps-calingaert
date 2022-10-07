@@ -4,6 +4,8 @@
   <NonVisualComponents>
     <Component class="javax.swing.ButtonGroup" name="modoOperacao">
     </Component>
+    <Component class="javax.swing.JFileChooser" name="jFileChooser1">
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -34,22 +36,30 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace pref="46" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
+              <EmptySpace pref="42" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="toggleModoTabela" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="modoStep" min="-2" max="-2" attributes="0"/>
-                          <Component id="modoContinuo" min="-2" max="-2" attributes="0"/>
-                          <Component id="modoIntervalo" min="-2" max="-2" attributes="0"/>
-                          <Component id="botaoExecutar" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
+                          <Component id="resetButton" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="modoStep" min="-2" max="-2" attributes="0"/>
+                                      <Component id="modoContinuo" min="-2" max="-2" attributes="0"/>
+                                      <Component id="modoIntervalo" min="-2" max="-2" attributes="0"/>
+                                      <Component id="botaoExecutar" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
+                                  </Group>
+                                  <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                                  <Component id="tabelaRegistradoresScroll" min="-2" pref="281" max="-2" attributes="0"/>
+                              </Group>
+                              <Component id="consoleScroll" alignment="1" min="-2" pref="479" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
-                      <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
-                      <Component id="tabelaRegistradoresScroll" min="-2" pref="281" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                      <Component id="tabelaMemoriaScroll" min="-2" pref="281" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="consoleScroll" alignment="1" min="-2" pref="479" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-              <Component id="tabelaMemoriaScroll" min="-2" pref="281" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -58,11 +68,12 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="tabelaMemoriaScroll" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="49" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="resetButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="tabelaRegistradoresScroll" min="-2" pref="119" max="-2" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <Component id="modoStep" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -72,13 +83,15 @@
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="botaoExecutar" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="tabelaRegistradoresScroll" min="-2" pref="119" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="53" max="-2" attributes="0"/>
                       <Component id="consoleScroll" min="-2" pref="125" max="-2" attributes="0"/>
                   </Group>
+                  <Component id="tabelaMemoriaScroll" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
+              <Component id="toggleModoTabela" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -240,5 +253,21 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="resetButton">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Reset"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="resetButtonActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JToggleButton" name="toggleModoTabela">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Decimal"/>
+      </Properties>
+      <Events>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="toggleModoTabelaStateChanged"/>
+      </Events>
+    </Component>
   </SubComponents>
 </Form>
