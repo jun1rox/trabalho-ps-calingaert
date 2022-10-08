@@ -30,8 +30,8 @@ public class Montador {
             if (linha.length() > 80) {
                 System.out.println("Ta muito grande, bb");
             } else {
-                linha = linha.replaceAll("\\t*", " ");
                 linha = linha.replaceAll("\\s+", " ");
+                linha = linha.trim();
                 for (String s : linha.split(" ")) {
                     System.out.println(s);
                 }

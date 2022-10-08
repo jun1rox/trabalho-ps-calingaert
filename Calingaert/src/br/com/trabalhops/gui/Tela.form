@@ -45,12 +45,18 @@
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="modoStep" min="-2" max="-2" attributes="0"/>
-                                      <Component id="modoContinuo" min="-2" max="-2" attributes="0"/>
-                                      <Component id="modoIntervalo" min="-2" max="-2" attributes="0"/>
-                                      <Component id="botaoExecutar" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
+                                      <Group type="103" alignment="0" groupAlignment="0" attributes="0">
+                                          <Component id="modoStep" min="-2" max="-2" attributes="0"/>
+                                          <Component id="modoContinuo" min="-2" max="-2" attributes="0"/>
+                                          <Component id="botaoExecutar" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Component id="modoIntervalo" min="-2" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="selectStepDuration" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                                   <Component id="tabelaRegistradoresScroll" min="-2" pref="281" max="-2" attributes="0"/>
                               </Group>
                               <Component id="consoleScroll" alignment="1" min="-2" pref="479" max="-2" attributes="0"/>
@@ -79,7 +85,10 @@
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="modoContinuo" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="modoIntervalo" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="modoIntervalo" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="selectStepDuration" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                               <Component id="botaoExecutar" min="-2" max="-2" attributes="0"/>
                           </Group>
@@ -268,6 +277,25 @@
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="toggleModoTabelaStateChanged"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="selectStepDuration">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="5">
+            <StringItem index="0" value="1"/>
+            <StringItem index="1" value="2"/>
+            <StringItem index="2" value="3"/>
+            <StringItem index="3" value="5"/>
+            <StringItem index="4" value="10"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="selectStepDurationActionPerformed"/>
+      </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>
