@@ -79,8 +79,6 @@ public class Tela extends javax.swing.JFrame {
         setBackground(new java.awt.Color(51, 204, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        botaoExecutar.setBackground(new java.awt.Color(255, 255, 255));
-        botaoExecutar.setForeground(new java.awt.Color(0, 0, 0));
         botaoExecutar.setText("Prox Instrução");
         botaoExecutar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -159,6 +157,11 @@ public class Tela extends javax.swing.JFrame {
         toggleModoTabela.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 toggleModoTabelaStateChanged(evt);
+            }
+        });
+        toggleModoTabela.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                toggleModoTabelaActionPerformed(evt);
             }
         });
 
@@ -290,14 +293,24 @@ public class Tela extends javax.swing.JFrame {
     }//GEN-LAST:event_resetButtonActionPerformed
 
     private void toggleModoTabelaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_toggleModoTabelaStateChanged
-        dados.toggleDecimal();
-        this.preencheTabela(this.memoria);
+
     }//GEN-LAST:event_toggleModoTabelaStateChanged
 
     private void selectStepDurationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectStepDurationActionPerformed
         String tempoSegundos = selectStepDuration.getSelectedItem().toString();
         stepDuration = Integer.parseInt(tempoSegundos) * 1000;
     }//GEN-LAST:event_selectStepDurationActionPerformed
+
+    private void toggleModoTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleModoTabelaActionPerformed
+        dados.toggleDecimal();
+        this.preencheTabela(this.memoria);
+        
+        if (dados.decimal == true) {
+            toggleModoTabela.setText("Binário");
+        } else {
+            toggleModoTabela.setText("Decimal");
+        }
+    }//GEN-LAST:event_toggleModoTabelaActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */

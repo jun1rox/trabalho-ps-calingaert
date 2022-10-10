@@ -3,12 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Franco/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/utils/Utils.java</file>
-            <file>file:/C:/Users/Franco/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/montador/Montador.java</file>
-            <file>file:/C:/Users/Franco/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/gui/Tela.java</file>
-            <file>file:/C:/Users/Franco/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/calingaert/Calingaert.java</file>
-            <file>file:/C:/Users/Franco/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/gui/Dados.java</file>
-            <file>file:/C:/Users/Franco/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/gui/TaskDepuracao.java</file>
+            <file>file:/C:/Users/junio/Documents/NetBeansProjects/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/montador/Instrucoes.java</file>
+            <file>file:/C:/Users/junio/Documents/NetBeansProjects/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/montador/Montador.java</file>
+            <file>file:/C:/Users/junio/Documents/NetBeansProjects/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/gui/Tela.java</file>
+            <file>file:/C:/Users/junio/Documents/NetBeansProjects/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/calingaert/Calingaert.java</file>
+            <file>file:/C:/Users/junio/Documents/NetBeansProjects/trabalho-ps-calingaert/Calingaert/src/br/com/trabalhops/montador/Simbolo.java</file>
         </group>
     </open-files>
 </project-private>

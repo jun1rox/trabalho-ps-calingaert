@@ -14,8 +14,10 @@ import java.util.regex.Pattern;
 public class Montador {
     
     private String caminho;
+    private Instrucoes instrucoes;
     
     public Montador() {
+        this.instrucoes = new Instrucoes();
         this.caminho = "../teste.asm";
     }
     
@@ -33,7 +35,9 @@ public class Montador {
                 linha = linha.replaceAll("\\s+", " ");
                 linha = linha.trim();
                 for (String s : linha.split(" ")) {
-                    System.out.println(s);
+                    System.out.print(s);
+                    System.out.println(instrucoes.checkInstrucao(s));
+                    
                 }
             }
             linha = buffRead.readLine();

@@ -108,12 +108,6 @@
   <SubComponents>
     <Component class="javax.swing.JButton" name="botaoExecutar">
       <Properties>
-        <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="ff" red="ff" type="rgb"/>
-        </Property>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="0" type="rgb"/>
-        </Property>
         <Property name="text" type="java.lang.String" value="Prox Instru&#xe7;&#xe3;o"/>
       </Properties>
       <Events>
@@ -276,6 +270,7 @@
       </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="toggleModoTabelaStateChanged"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="toggleModoTabelaActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="selectStepDuration">
