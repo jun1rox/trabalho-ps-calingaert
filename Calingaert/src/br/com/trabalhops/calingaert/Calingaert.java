@@ -22,25 +22,21 @@ public class Calingaert {
         Registradores registradores = new Registradores();
         registradores.setPC(valor_pc);
         String caminho = "../fibonacci.txt";
-        
+
         Montador montador = new Montador();
         montador.monta();
 
-        try {
-            memoria.carregaPrograma(caminho);
-        } catch (IOException ex) {
-            Logger.getLogger(Calingaert.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        memoria.carregaPrograma(caminho);
 
         Tela tela = new Tela(registradores, memoria);
-        
+
         ImageIcon img = new ImageIcon("../calingas.png");
         tela.setIconImage(img.getImage());
         tela.setTitle("Calingaert - g²");
         tela.preencheTabela(memoria);
         tela.preencheTabelaRegistradores(registradores);
         tela.setResizable(false);
-        tela.getContentPane().setBackground(new Color(51, 204, 255)); 
+        tela.getContentPane().setBackground(new Color(51, 204, 255));
         tela.setVisible(true);
     }
 
