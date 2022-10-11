@@ -1,6 +1,6 @@
 package br.com.trabalhops.montador;
 
-import java.awt.List;
+import java.util.List;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -14,14 +14,11 @@ import java.util.regex.Pattern;
  */
 public class Montador {
 
-    private String caminho;
-    private Instrucoes instrucoes;
-    private ArrayList<Simbolo> simbolos;
+    private final String caminho = "../teste.asm";
+    private final Instrucoes instrucoes = new Instrucoes();
+    private final List<Simbolo> simbolos = new ArrayList<>();
 
     public Montador() {
-        this.instrucoes = new Instrucoes();
-        this.caminho = "../teste.asm";
-        this.simbolos = new ArrayList();
     }
 
     public boolean validaSimbolo(String nome) {
@@ -38,21 +35,13 @@ public class Montador {
         Pattern caracteres = Pattern.compile("^[a-zA-Z0-9!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?]*$", Pattern.CASE_INSENSITIVE);
         Matcher findLetras = letras.matcher(palavra);
         Matcher findCaracteres = caracteres.matcher(palavra);
-        if (findLetras.find()) {
-            return false; // HEXA???
-        } else {
-            if (!findCaracteres.find()) {
-                return true;
-            } else {
-                if (palavra.startsWith("#")) {
-                    return true;
-                } else if (palavra.startsWith("@")) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+        if (findLetras.find() || findCaracteres.find()) {
+            return false;
         }
+        if (palavra.startsWith("#") || palavra.startsWith("@")) {
+            return true;
+        }
+        return false;
     }
 
     public boolean monta() throws IOException {
@@ -76,7 +65,9 @@ public class Montador {
                 linha = linha.trim();
                 palavras = linha.split(" ");
                 linha = buffRead.readLine();
-                if ("".equals(palavras[0])) continue;
+                if ("".equals(palavras[0])) {
+                    continue;
+                }
 
                 if (instrucoes.checkInstrucao(palavras[0])) {
                     posInstrucao = 0;
@@ -100,12 +91,12 @@ public class Montador {
                 }
 
                 posicao += 1; // JA PASSOU A LABEL PODE SOMAR A POSICAO (POSICAO DA INSTRUÇÃO)
-                
-                
-                // 
+
                 int instrucao_e_opcodes[] = instrucoes.getInstrucao(palavras[posInstrucao]);
-                if (instrucao_e_opcodes == null) continue;
-                
+                if (instrucao_e_opcodes == null) {
+                    continue;
+                }
+
                 int operandoAmount = palavras.length - instrucao_e_opcodes[1];
 
                 if (operandoAmount > posInstrucao + 1) {
@@ -113,9 +104,9 @@ public class Montador {
                 } else if (operandoAmount < posInstrucao + 1) {
                     // ERROR, TOO FEW ARGUMENTS
                 } else {
-                    for(int i = posInstrucao + 1; i < palavras.length; i++) {
+                    for (int i = posInstrucao + 1; i < palavras.length; i++) {
                         findNumeros = numeros.matcher(palavras[i]); // VERIFICA SE É UM NOME VALIDO PRA SIMBOLO
-                        if(!findNumeros.find()) { 
+                        if (!findNumeros.find()) {
                             if (validaSimbolo(palavras[i])) {
                                 // ATUALIZAR POSICOES !!!!!!!!!!!!!
                                 simbolos.add(new Simbolo(palavras[i], posicao));
@@ -123,7 +114,7 @@ public class Montador {
                                 // MAPA DE RELOCAÇÃO? O SIMBOLO JA TA DEFINIDO
                             }
                         } else {
-                            if(!verificaNumero(palavras[i])) { // VE SE É UM NUMERO
+                            if (!verificaNumero(palavras[i])) { // VE SE É UM NUMERO
                                 System.out.println("Erro: numero");
                                 // NUMERO NO FORMATO CORRETO?
                                 // NUMERO GRANDE DEMAIS?
@@ -132,8 +123,7 @@ public class Montador {
                                 // SE A OPERAÇÃO PERMITE ex: existe ADD direto imediato?
                             }
                         }
-                        
-                        
+
                     }
                 }
             }
