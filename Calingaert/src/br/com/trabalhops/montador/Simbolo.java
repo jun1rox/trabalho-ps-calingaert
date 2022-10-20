@@ -40,6 +40,10 @@ public class Simbolo {
     public int getEndereco() {
         return endereco;
     }
+    
+    public String getEnderecoString() {
+        return Integer.toString(endereco);
+    }
 
     public boolean isDefinido() {
         return definido;

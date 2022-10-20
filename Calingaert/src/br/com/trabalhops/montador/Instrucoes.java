@@ -1,42 +1,40 @@
 package br.com.trabalhops.montador;
   
-import java.util.HashMap;
-import java.util.Map;
+import static br.com.trabalhops.montador.Instrucao.ModosEnderecamento.*;
+import java.util.Arrays;
 
 /**
  *
  * @author junio
  */
-public class Instrucoes {
-    private final Map<String,int[]> mapa;
+public enum Instrucoes {
+    
+    
+    ADD(new Instrucao("ADD", 1, Arrays.asList(2, 34, 130), Arrays.asList(DIRETO, INDIRETO, IMEDIATO)));
+    
+    private final Instrucao instrucao;
+    
+    private Instrucoes(Instrucao instrucao) {
+        this.instrucao = instrucao;
+    }
 
-    public Instrucoes() {
-        this.mapa = new HashMap<>();
-        mapa.put( "ADD", new int[] {2,1});
-        mapa.put( "BR", new int[] {0,1});
-        mapa.put( "BRNEG", new int[] {5,1});
-        mapa.put( "BRPOS", new int[] {1,1});
-        mapa.put( "BRZERO", new int[] {4,1});
-        mapa.put( "CALL", new int[] {15,1});
-        mapa.put( "COPY", new int[] {13,2});
-        mapa.put( "DIVIDE", new int[] {10,1});
-        mapa.put( "LOAD", new int[] {3,1});
-        mapa.put( "MULT", new int[] {14,1});
-        mapa.put( "READ", new int[] {12,1});
-        mapa.put( "RET", new int[] {16,0});
-        mapa.put( "STOP", new int[] {11,0});
-        mapa.put( "STORE", new int[] {7,1});
-        mapa.put( "SUB", new int[] {6,1});
-        mapa.put( "WRITE", new int[] {8,1});
+    public Instrucao getInstrucao() {
+        return instrucao;
     }
     
-    public boolean checkInstrucao(String instrucao) {
-        instrucao = instrucao.toUpperCase();
-        return mapa.get(instrucao) != null;
+    public String getNome() {
+        return this.instrucao.getNome();
     }
     
-    public int[] getInstrucao(String instrucao) { 
-        instrucao = instrucao.toUpperCase();
-        return mapa.get(instrucao);
+    public Instrucoes getInstrucao(String nome) {
+        switch(nome) {
+            case "add" -> {
+                return ADD;
+            }
+            
+            default -> {
+                return null;
+            }
+        }
     }
 }
