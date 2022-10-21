@@ -64,11 +64,11 @@ public class Montador {
         List<String> palavras = trataLinha(linha);
         if ("".equals(palavras.get(0))) return;
 
-        Instrucao ins = instrucoes.getInstrucao(palavras.get(0)).getInstrucao();
+        Instrucao ins = instrucoes.getInstrucao(palavras.get(0));
         if (ins != null) {
             posInstrucao = 0;
         } else {
-            ins = instrucoes.getInstrucao(palavras.get(1)).getInstrucao(); // MUDAR ISSO PQ TA TERRIVEL
+            ins = instrucoes.getInstrucao(palavras.get(1)); // MUDAR ISSO PQ TA TERRIVEL
             if (palavras.size() < 2) {
                 // testa se existe segunda palavra na linha 
                 // ERROR, TOO FEW ARGUMENTS (SO TEM UMA LABEL NA LINHA)
@@ -145,11 +145,11 @@ public class Montador {
         List<String> palavras = trataLinha(linha);
         if ("".equals(palavras.get(0))) return;
         
-        Instrucao ins = instrucoes.getInstrucao(palavras.get(0)).getInstrucao();
+        Instrucao ins = instrucoes.getInstrucao(palavras.get(0));
         if (ins != null) {
             posInstrucao = 0;
         } else {
-            ins = instrucoes.getInstrucao(palavras.get(1)).getInstrucao();
+            ins = instrucoes.getInstrucao(palavras.get(1));
             posInstrucao = 1;
         }
         

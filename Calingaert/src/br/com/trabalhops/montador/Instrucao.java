@@ -31,6 +31,12 @@ public class Instrucao {
         this.modosPermitidos = modosPermitidos;
     }
     
+    public Instrucao(String nome, int numOperandos, List<Integer> codigos) {
+        this.nome = nome;
+        this.numOperandos = numOperandos;
+        this.codigos = codigos;
+    }
+    
     public boolean isPseudoInstrucao() {
         return pseudoInstrucao;
     }
