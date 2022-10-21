@@ -26,16 +26,15 @@ public class Instrucoes {
     public final Instrucao SUB = new Instrucao("SUB", 1, Arrays.asList(6, 34, 130), Arrays.asList(DIRETO, INDIRETO, IMEDIATO));
     public final Instrucao WRITE = new Instrucao("WRITE", 1, Arrays.asList(8, 34, 130), Arrays.asList(DIRETO, INDIRETO, IMEDIATO));
     
-    public final Instrucao CONST = new Instrucao("CONST", 1, Arrays.asList(-1), Arrays.asList(DIRETO));
-    public final Instrucao END = new Instrucao("END", 0, Arrays.asList(-1), Arrays.asList(DIRETO));
-    public final Instrucao EXTDEF = new Instrucao("EXTDEF", 1, Arrays.asList(-1), Arrays.asList(DIRETO));
-    public final Instrucao EXTR = new Instrucao("EXTR", 0, Arrays.asList(-1), Arrays.asList(DIRETO));
-    public final Instrucao SPACE = new Instrucao("SPACE", 0, Arrays.asList(-1), Arrays.asList(DIRETO));
-    public final Instrucao STACK = new Instrucao("STACK", 1, Arrays.asList(-1), Arrays.asList(DIRETO));
-    public final Instrucao START = new Instrucao("START", 1, Arrays.asList(-1), Arrays.asList(DIRETO));
+    public final Instrucao CONST = new Instrucao("CONST", 1, Arrays.asList(-1), Arrays.asList(DIRETO), true);
+    public final Instrucao END = new Instrucao("END", 0, Arrays.asList(-1), Arrays.asList(DIRETO), true);
+    public final Instrucao EXTDEF = new Instrucao("EXTDEF", 1, Arrays.asList(-1), Arrays.asList(DIRETO), true);
+    public final Instrucao EXTR = new Instrucao("EXTR", 0, Arrays.asList(-1), Arrays.asList(DIRETO), true);
+    public final Instrucao SPACE = new Instrucao("SPACE", 0, Arrays.asList(-1), Arrays.asList(DIRETO), true);
+    public final Instrucao START = new Instrucao("START", 1, Arrays.asList(-1), Arrays.asList(DIRETO),true);
     
     public Instrucao getInstrucao(String nome) {
-        switch(nome) {
+        switch(nome.toLowerCase()) {
             case "add" -> {
                 return ADD;
             }
@@ -114,10 +113,6 @@ public class Instrucoes {
             
             case "space" -> {
                 return SPACE;
-            }
-            
-            case "stack" -> {
-                return STACK;
             }
             
             case "start" -> {

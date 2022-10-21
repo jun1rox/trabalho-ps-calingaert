@@ -40,6 +40,12 @@ public class Montador {
         }
         buffRead.close();
         
+        for (Simbolo s : simbolos) {
+            System.out.println(s.getRotulo());
+            System.out.println(s.getEndereco());
+            System.out.println(s.isDefinido());  
+        }
+                
         // segunda passagem
         if(this.erros.isEmpty()) {
             this.contadorLinha = 0;
@@ -50,12 +56,6 @@ public class Montador {
                 this.linhaSegundaPassagem();
             }
             buffRead.close();
-        }
-        
-        for (Simbolo s : simbolos) {
-            System.out.println(s.getRotulo());
-            System.out.println(s.getEndereco());
-            System.out.println(s.isDefinido());  
         }
         return true;
     }
@@ -68,16 +68,13 @@ public class Montador {
         if (ins != null) {
             posInstrucao = 0;
         } else {
-            ins = instrucoes.getInstrucao(palavras.get(1)); // MUDAR ISSO PQ TA TERRIVEL
-            if (palavras.size() < 2) {
-                // testa se existe segunda palavra na linha 
-                // ERROR, TOO FEW ARGUMENTS (SO TEM UMA LABEL NA LINHA)
-                // RETURN
-            }
+            ins = instrucoes.getInstrucao(palavras.get(1));
             if (ins == null) {
+                // LABEL OP1 OP2
                 // ERROR, THERE'S NO INSTRUCTION IN THE LINE
                 // RETURN
             }
+            
             if (!existeSimbolo(palavras.get(0))) {
                 simbolos.add(new Simbolo(palavras.get(0), posicao, true));
             } else {
@@ -120,6 +117,8 @@ public class Montador {
             } else {
                 modo_op1 = DIRETO;
             }
+            
+            // erro valor fora do limite
             if (!ins.getModosPermitidos().contains(modo_op1)) {
                 // ERRO
             }
@@ -133,6 +132,10 @@ public class Montador {
                 } else {
                     modo_op2 = DIRETO;
                 }
+                
+                // trataCopy(modo_op1, modo_op2) -> codígo ou -1 
+                // DIRETO, INDIRETO -> CÓDIGO 
+                // IMEDIATO, INDIRETO -> -1
                 // tratar COPY
             }
         }
@@ -260,7 +263,6 @@ public class Montador {
             return DIRETO;
         }
         else if (findIndireto.find()) {
-            // INDIRETO
             return INDIRETO;
         }
         else if (findImediato.find()) {
