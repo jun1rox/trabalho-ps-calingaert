@@ -6,7 +6,9 @@ import br.com.trabalhops.montador.Instrucao.ModosEnderecamento;
 import static br.com.trabalhops.montador.Instrucao.ModosEnderecamento.*;
 import java.util.List;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,9 +33,24 @@ public class Montador {
     private BufferedReader buffRead;
     private String linha;
     private Matcher findNumeros;
+    
+    private BufferedWriter buffWriterObj, buffWriterLst;
+    
+    //Dentro desses arrays, colocar as palavras para serem gravadas nos arquivos .obj e .lst
+        
+    private ArrayList<String> obj  = new ArrayList();
+    private ArrayList<String> lst  = new ArrayList();
+    
+    private final String saidaObj = "./src/arquivos/file.obj";
+    private final String saidaLst = "./src/arquivos/file.lst";
 
     public boolean monta() throws IOException {
         buffRead = new BufferedReader(new FileReader(this.caminho));
+        
+        this.buffWriterObj = new BufferedWriter(new FileWriter(saidaObj));
+       
+        this.buffWriterLst = new BufferedWriter(new FileWriter(saidaLst));
+        
         linha = buffRead.readLine();
         while (buffRead.ready()) {
             this.linhaPrimeiraPassagem();
@@ -45,7 +62,7 @@ public class Montador {
             System.out.println(s.getEndereco());
             System.out.println(s.isDefinido());  
         }
-                
+             
         // segunda passagem
         if(this.erros.isEmpty()) {
             this.contadorLinha = 0;
@@ -57,13 +74,31 @@ public class Montador {
             }
             buffRead.close();
         }
+        
+        
+        buffWriterObj.append("* file.obj\n");
+        for (String string : this.obj) {
+            buffWriterObj.append(string+"\n");
+        }
+        buffWriterObj.append("TAMANHO\n" + obj.size());
+        
+        buffWriterLst.append("LINHA CÓDIGO INSTRUÇÃO\n");
+        for (int i = 0; i < this.lst.size(); i++) {
+            buffWriterLst.append(i + " " + obj.get(i) + " " + lst.get(i)+ "\n");
+        }
+        
+        this.buffWriterObj.flush();
+        this.buffWriterLst.flush();
+        this.buffWriterObj.close();        
+        this.buffWriterLst.close();
+        
         return true;
     }
 
     private void linhaPrimeiraPassagem() throws IOException {
         List<String> palavras = trataLinha(linha);
         if ("".equals(palavras.get(0))) return;
-
+        
         Instrucao ins = instrucoes.getInstrucao(palavras.get(0));
         if (ins != null) {
             posInstrucao = 0;
@@ -139,6 +174,10 @@ public class Montador {
                 // tratar COPY
             }
         }
+        
+                
+        this.buffWriterObj.append(palavras.get(0));
+        
 
         posicao +=1;
         linha = buffRead.readLine();
