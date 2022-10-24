@@ -1,5 +1,6 @@
 package br.com.trabalhops.montador;
   
+import br.com.trabalhops.montador.Instrucao.ModosEnderecamento;
 import static br.com.trabalhops.montador.Instrucao.ModosEnderecamento.*;
 import java.util.Arrays;
 
@@ -7,9 +8,7 @@ import java.util.Arrays;
  *
  * @author junio
  */
-public class Instrucoes {
-    
-    
+public class Instrucoes {   
     public final Instrucao ADD = new Instrucao("ADD", 1, Arrays.asList(2, 34, 130), Arrays.asList(DIRETO, INDIRETO, IMEDIATO));
     public final Instrucao BR = new Instrucao("BR", 1, Arrays.asList(0, 34), Arrays.asList(DIRETO, INDIRETO));
     public final Instrucao BRNEG = new Instrucao("BRNEG", 1, Arrays.asList(5, 34), Arrays.asList(DIRETO, INDIRETO));
@@ -25,6 +24,7 @@ public class Instrucoes {
     public final Instrucao STORE = new Instrucao("STORE", 1, Arrays.asList(7, 34), Arrays.asList(DIRETO, INDIRETO));
     public final Instrucao SUB = new Instrucao("SUB", 1, Arrays.asList(6, 34, 130), Arrays.asList(DIRETO, INDIRETO, IMEDIATO));
     public final Instrucao WRITE = new Instrucao("WRITE", 1, Arrays.asList(8, 34, 130), Arrays.asList(DIRETO, INDIRETO, IMEDIATO));
+    public final Instrucao COPY = new Instrucao("COPY", 2, Arrays.asList(), Arrays.asList());
     
     public final Instrucao CONST = new Instrucao("CONST", 1, Arrays.asList(-1), Arrays.asList(DIRETO), true);
     public final Instrucao END = new Instrucao("END", 0, Arrays.asList(-1), Arrays.asList(DIRETO), true);
@@ -32,6 +32,37 @@ public class Instrucoes {
     public final Instrucao EXTR = new Instrucao("EXTR", 0, Arrays.asList(-1), Arrays.asList(DIRETO), true);
     public final Instrucao SPACE = new Instrucao("SPACE", 0, Arrays.asList(-1), Arrays.asList(DIRETO), true);
     public final Instrucao START = new Instrucao("START", 1, Arrays.asList(-1), Arrays.asList(DIRETO),true);
+    
+    public Integer trataCopy(ModosEnderecamento op1, ModosEnderecamento op2) { 
+        if(null == op1) {
+            return -1;
+        } else 
+        switch (op1) {
+            case DIRETO -> {
+                if(null == op2) {
+                    return -1;
+                } else return switch (op2) {
+                    case DIRETO -> 13;
+                    case INDIRETO -> 77;
+                    case IMEDIATO -> 141;
+                    default -> -1;
+                };
+            }
+            case INDIRETO -> {
+                if(null == op2) {
+                    return -1;
+                } else return switch (op2) {
+                    case DIRETO -> 45;
+                    case INDIRETO -> 109;
+                    case IMEDIATO -> 173;
+                    default -> -1;
+                };
+            }
+            default -> {
+                return -1;
+            }
+        }
+    }
     
     public Instrucao getInstrucao(String nome) {
         switch(nome.toLowerCase()) {
@@ -117,6 +148,10 @@ public class Instrucoes {
             
             case "start" -> {
                 return START;
+            }
+            
+            case "copy" -> {
+                return COPY;
             }
             
             default -> {

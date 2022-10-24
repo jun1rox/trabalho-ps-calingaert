@@ -13,7 +13,7 @@ public enum TipoErro {
     FORA_DOS_LIMITES("Valor fora dos limites."),
     ERRO_SINTAXE("Erro de sintaxe."),
     SIMBOLO_REDEFINIDO("Símbolo redefinido."),
-    SIMBOLO_NAO_REDEFINIDO("Símbolo não definido."),
+    SIMBOLO_NAO_DEFINIDO("Símbolo não definido."),
     INSTRUCAO_INVALIDA("Instrução inválida."),
     FALTA_END("Falta diretiva END.");
     

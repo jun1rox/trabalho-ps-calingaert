@@ -1,4 +1,3 @@
-		start inicio
 inicio	copy zero older
 		copy one old
 		read limit
@@ -20,3 +19,4 @@ older 	space
 old		space
 new		space
 limit		space
+copy zero older
