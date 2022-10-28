@@ -138,14 +138,14 @@ public class Montador {
 
         if (operandoAmount > posInstrucao + 1) {
             // ERRO: INSTRUÇÃO TEM OPERANDOS DEMAIS
-            erros.add(new ErroMontador(contadorLinha, TipoErro.INSTRUCAO_INVALIDA));
+            erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
             System.out.println(1);
             linha = buffRead.readLine();
             return;
         }
         if (operandoAmount < posInstrucao + 1) {
             // ERRO: INSTRUÇÃO TEM POUCOS OPERANDOS
-            erros.add(new ErroMontador(contadorLinha, TipoErro.INSTRUCAO_INVALIDA));
+            erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
             linha = buffRead.readLine();
             return;
         }
@@ -160,7 +160,7 @@ public class Montador {
                     ModosEnderecamento modo_op1 = verificaNumero(op_1);
                     if(modo_op1 != DIRETO) { // ACEITAR APENAS NÚMEROS SEM CARACTERES
                         // ERRO: OPERANDO INVÁLIDO
-                        erros.add(new ErroMontador(contadorLinha, TipoErro.INSTRUCAO_INVALIDA));                    }
+                        erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));                    }
                 }
                 case "END" -> {
                     // ??
@@ -178,7 +178,7 @@ public class Montador {
                 }
                 */
                 default -> {
-                    erros.add(new ErroMontador(contadorLinha, TipoErro.INSTRUCAO_INVALIDA));
+                    erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                 }
             }
             linha = buffRead.readLine();
@@ -208,14 +208,14 @@ public class Montador {
                 
                 if(instrucoes.trataCopy(modo_op1, modo_op2) == -1) {
                     // ERRO: OPERANDOS/COMBINAÇÃO DE OPERANDOS INVÁLIDA
-                    erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_REDEFINIDO));
+                    erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                     linha = buffRead.readLine();
                     return;
                 }       
             } else {
                 if (!ins.getModosPermitidos().contains(modo_op1)) {
                     // ERRO: MODO DE ENDEREÇAMENTO NÃO PERMITIDO
-                    erros.add(new ErroMontador(contadorLinha, TipoErro.INSTRUCAO_INVALIDA));
+                    erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                     linha = buffRead.readLine();
                     return;
                 }
