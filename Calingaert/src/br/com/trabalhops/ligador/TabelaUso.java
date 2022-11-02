@@ -7,21 +7,25 @@ import br.com.trabalhops.montador.Simbolo;
  * @author aluno
  */
 public class TabelaUso extends Tabela {
-    private boolean sinal; //positivo -> true & negativo -> false
+    public enum Sinal {
+        POSITIVO, NEGATIVO;
+    }
+    
+    private Sinal sinal; //positivo -> true & negativo -> false
 
     public TabelaUso() {
     }
 
-    public TabelaUso(Simbolo simbolo, int endereco, boolean sinal) {
+    public TabelaUso(Simbolo simbolo, int endereco, Sinal sinal) {
         super(simbolo, endereco);
         this.sinal = sinal;
     }
 
-    public boolean isSinal() {
+    public Sinal isSinal() {
         return sinal;
     }
 
-    public void setSinal(boolean sinal) {
+    public void setSinal(Sinal sinal) {
         this.sinal = sinal;
     }
     
