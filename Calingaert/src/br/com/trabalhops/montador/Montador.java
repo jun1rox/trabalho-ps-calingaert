@@ -33,33 +33,40 @@ public class Montador {
     private BufferedReader buffRead;
     private String linha;
     private Matcher findNumeros;
-    
+    private boolean faltaEnd = true;
+
     private BufferedWriter buffWriterObj, buffWriterLst;
-    
+
     private final String saidaObj = "./src/arquivos/file.obj";
     private final String saidaLst = "./src/arquivos/file.lst";
 
     public boolean monta() throws IOException {
         buffRead = new BufferedReader(new FileReader(this.caminho));
-        
+
         this.buffWriterObj = new BufferedWriter(new FileWriter(saidaObj));
         this.buffWriterLst = new BufferedWriter(new FileWriter(saidaLst));
-        
+
         linha = buffRead.readLine();
-        while (buffRead.ready()) {
+        while (buffRead.ready() && faltaEnd) {
             this.linhaPrimeiraPassagem();
         }
         buffRead.close();
-        
+
         for (Simbolo s : simbolos) {
-            if(!s.isDefinido()) erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_NAO_DEFINIDO));
+            if (!s.isDefinido()) {
+                erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_NAO_DEFINIDO));
+            }
             System.out.println(s.getRotulo());
             System.out.println(s.getEndereco());
-            System.out.println(s.isDefinido());  
+            System.out.println(s.isDefinido());
         }
-             
+
+        if (faltaEnd) {
+            erros.add(new ErroMontador(contadorLinha, TipoErro.FALTA_END));
+        }
+
         // segunda passagem
-        if(this.erros.isEmpty()) {
+        if (this.erros.isEmpty()) {
             this.contadorLinha = 0;
             this.posicao = 0;
             buffRead = new BufferedReader(new FileReader(this.caminho));
@@ -68,61 +75,74 @@ public class Montador {
                 this.linhaSegundaPassagem();
             }
             buffRead.close();
-            
+
             buffWriterObj.append("* file.obj\n");
             for (String string : this.resultado) {
-                buffWriterObj.append(string+"\n");
+                buffWriterObj.append(string + "\n");
             }
             buffWriterObj.append("TAMANHO\n" + resultado.size());
         }
-                
-        if(erros.isEmpty()) {
+
+        if (erros.isEmpty()) {
             buffWriterLst.append("CÓDIGO COMPILADO COM SUCESSO.");
         } else {
             buffWriterLst.append("LINHA INSTRUÇÃO\n");
-            for (ErroMontador e: erros) {
+            for (ErroMontador e : erros) {
                 buffWriterLst.append(e.getLinha() + " " + e.getTipo().getDescricao() + "\n");
             }
         }
-        
+
         this.buffWriterObj.flush();
         this.buffWriterLst.flush();
-        this.buffWriterObj.close();        
+        this.buffWriterObj.close();
         this.buffWriterLst.close();
-        
+
         return erros.isEmpty();
     }
 
     private void linhaPrimeiraPassagem() throws IOException {
         List<String> palavras = trataLinha(linha);
-        if ("".equals(palavras.get(0))) return;
-        
+        if ("".equals(palavras.get(0))) {
+            return;
+        }
+
         Instrucao ins = instrucoes.getInstrucao(palavras.get(0));
+        if (contadorLinha == 0) {
+            if (palavras.size() == 2) {
+                if ("START".equals(ins.getNome())) {
+                    ins = instrucoes.getInstrucao(palavras.get(1));
+                    if (ins != null) {
+                        return;
+                    }
+                }
+            }
+            erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
+        }
         if (ins != null) {
             // primeira palavra é uma instrução
             posInstrucao = 0;
         } else {
             ins = instrucoes.getInstrucao(palavras.get(1));
-            if (ins == null) { // testa se a segunda palavra é uma instrução
+            if (ins == null) { // testa se a segunda palavra não é uma instrução
                 erros.add(new ErroMontador(contadorLinha, TipoErro.INSTRUCAO_INVALIDA));
                 linha = buffRead.readLine();
                 return;
             }
-            
+
             if (!existeSimbolo(palavras.get(0))) {
                 // testa se a primeira palavra é um simbolo ja definido
                 simbolos.add(new Simbolo(palavras.get(0), posicao, true));
             } else {
                 // se já existe, verifica se o simbolo está indefinido
                 boolean flag_indefinido = false;
-                for(Simbolo s: simbolos) {
-                    if(s.getRotulo().equals(palavras.get(0)) && !s.isDefinido()) {
+                for (Simbolo s : simbolos) {
+                    if (s.getRotulo().equals(palavras.get(0)) && !s.isDefinido()) {
                         flag_indefinido = true;
                         s.setDefinido(true);
                         s.setEndereco(posicao);
                     }
                 }
-                if(!flag_indefinido) {
+                if (!flag_indefinido) {
                     // ERRO: simbolo redefinido (2x no lado esquerdo)
                     linha = buffRead.readLine();
                     erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_REDEFINIDO));
@@ -132,7 +152,7 @@ public class Montador {
 
             posInstrucao = 1;
         }
-        
+
         int numOperandos = ins.getNumOperandos();
         int operandoAmount = palavras.size() - numOperandos;
 
@@ -149,8 +169,8 @@ public class Montador {
             linha = buffRead.readLine();
             return;
         }
-        if(ins.isPseudoInstrucao()) {
-            switch(ins.getNome()) {
+        if (ins.isPseudoInstrucao()) {
+            switch (ins.getNome()) {
                 case "SPACE" -> {
                     posicao += 3; // pula 3 palavras
                 }
@@ -158,12 +178,13 @@ public class Montador {
                     posicao += 1;
                     String op_1 = palavras.get(posInstrucao + 1);
                     ModosEnderecamento modo_op1 = verificaNumero(op_1);
-                    if(modo_op1 != DIRETO) { // ACEITAR APENAS NÚMEROS SEM CARACTERES
+                    if (modo_op1 != DIRETO) { // ACEITAR APENAS NÚMEROS SEM CARACTERES
                         // ERRO: OPERANDO INVÁLIDO
-                        erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));                    }
+                        erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
+                    }
                 }
                 case "END" -> {
-                    // ??
+                    this.faltaEnd = false;
                 }
                 case "START" -> {
                     // variavel posição inicial?
@@ -176,7 +197,7 @@ public class Montador {
                 case "EXTDEF" -> {
                     
                 }
-                */
+                 */
                 default -> {
                     erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                 }
@@ -184,7 +205,7 @@ public class Montador {
             linha = buffRead.readLine();
             return;
         }
-        if(numOperandos > 0) {
+        if (numOperandos > 0) {
             posicao += 1;
             String op_1 = palavras.get(posInstrucao + 1);
             ModosEnderecamento modo_op1;
@@ -193,11 +214,10 @@ public class Montador {
             } else {
                 modo_op1 = DIRETO;
             }
-            
+
             // FALTA: erro valor fora do limite
-            
-            if(ins.getNome().equals("COPY")) {
-                posicao +=1;
+            if (ins.getNome().equals("COPY")) {
+                posicao += 1;
                 String op_2 = palavras.get(posInstrucao + 2);
                 ModosEnderecamento modo_op2;
                 if (!trataSimbolo(op_2)) {
@@ -205,13 +225,13 @@ public class Montador {
                 } else {
                     modo_op2 = DIRETO;
                 }
-                
-                if(instrucoes.trataCopy(modo_op1, modo_op2) == -1) {
+
+                if (instrucoes.trataCopy(modo_op1, modo_op2) == -1) {
                     // ERRO: OPERANDOS/COMBINAÇÃO DE OPERANDOS INVÁLIDA
                     erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                     linha = buffRead.readLine();
                     return;
-                }       
+                }
             } else {
                 if (!ins.getModosPermitidos().contains(modo_op1)) {
                     // ERRO: MODO DE ENDEREÇAMENTO NÃO PERMITIDO
@@ -221,15 +241,17 @@ public class Montador {
                 }
             }
         }
-        
-        posicao +=1;
+
+        posicao += 1;
         linha = buffRead.readLine();
     }
 
-     private void linhaSegundaPassagem() throws IOException {
+    private void linhaSegundaPassagem() throws IOException {
         List<String> palavras = trataLinha(linha);
-        if ("".equals(palavras.get(0))) return;
-        
+        if ("".equals(palavras.get(0))) {
+            return;
+        }
+
         Instrucao ins = instrucoes.getInstrucao(palavras.get(0));
         if (ins != null) {
             posInstrucao = 0;
@@ -237,12 +259,12 @@ public class Montador {
             ins = instrucoes.getInstrucao(palavras.get(1));
             posInstrucao = 1;
         }
-        
+
         int numOperandos = ins.getNumOperandos();
-        if(ins.isPseudoInstrucao()) {
-            switch(ins.getNome()) {
+        if (ins.isPseudoInstrucao()) {
+            switch (ins.getNome()) {
                 case "SPACE" -> {
-                    for(int i = 0; i < 3; ++i) {
+                    for (int i = 0; i < 3; ++i) {
                         resultado.add("000");
                     }
                 }
@@ -263,10 +285,10 @@ public class Montador {
                 case "EXTDEF" -> {
                     
                 }
-                */
+                 */
             }
         } else {
-            if(numOperandos > 0) {
+            if (numOperandos > 0) {
                 boolean flagIsSimbolo_1 = false;
                 posicao += 1;
                 String op_1 = palavras.get(posInstrucao + 1);
@@ -278,10 +300,10 @@ public class Montador {
                     modo_op1 = DIRETO;
                 }
 
-                if(ins.getNome().equals("COPY")) {
+                if (ins.getNome().equals("COPY")) {
                     // se for COPY pega o segundo operando (apenas COPY tem dois operandos)
                     // e 6 combinações de operandos
-                    posicao +=1;
+                    posicao += 1;
                     String op_2 = palavras.get(posInstrucao + 2);
                     ModosEnderecamento modo_op2;
                     if (!existeSimbolo(op_2)) {
@@ -295,7 +317,7 @@ public class Montador {
                     // NÃO É O COPY SEGUIR NORMALMENTE
                     // escreve o código da instrução conforme o modo de endereçamento do operando
                     resultado.add(preencheZeros(ins.getCodigoMontado(modo_op1)));
-                    if(flagIsSimbolo_1) {
+                    if (flagIsSimbolo_1) {
                         Simbolo s = getSimbolo(op_1);
                         // escreve o endereço do operando simbolo
                         resultado.add(preencheZeros(s.getEnderecoString()));
@@ -310,10 +332,10 @@ public class Montador {
                 resultado.add(preencheZeros(ins.getCodigos().get(0).toString()));
             }
         }
-              
+
         linha = buffRead.readLine();
-     }
-     
+    }
+
     private boolean existeSimbolo(String nome) {
         for (Simbolo s : this.simbolos) {
             if (s.getRotulo().equals(nome)) {
@@ -322,7 +344,7 @@ public class Montador {
         }
         return false;
     }
-    
+
     private Simbolo getSimbolo(String nome) {
         for (Simbolo s : this.simbolos) {
             if (s.getRotulo().equals(nome)) {
@@ -331,37 +353,41 @@ public class Montador {
         }
         return null;
     }
-    
+
     public String getValorNumero(String operando) {
         // remove caracteres especiais dos numeros
         // "#65" -> "65"     "87,I" -> "87"
         Pattern prefixo = Pattern.compile("[@#](\\d+)");
         Matcher findPrefixo = prefixo.matcher(operando);
-        if(findPrefixo.find()) operando = findPrefixo.group(1);
-        
+        if (findPrefixo.find()) {
+            operando = findPrefixo.group(1);
+        }
+
         Pattern sufixo = Pattern.compile("(\\d+),");
         Matcher findSufixo = sufixo.matcher(operando);
-        if(findSufixo.find()) operando = findSufixo.group(0);
-        
+        if (findSufixo.find()) {
+            operando = findSufixo.group(0);
+        }
+
         return operando;
     }
-    
+
     public String preencheZeros(String palavra) {
         // adiciona zero a esquerda nas palavras (até 3 caracteres)
         // "8" -> "008"     "10" -> "010"
         String zeros = "";
-        if(palavra.length() == 1) {
+        if (palavra.length() == 1) {
             zeros = "00";
-        } else if(palavra.length() == 2) {
+        } else if (palavra.length() == 2) {
             zeros = "0";
         }
         return zeros + palavra;
     }
-    
+
     public List<String> trataLinha(String linha) {
         this.contadorLinha += 1;
         linha = linha.split("\\*")[0];
-        
+
         if (linha.length() > 80) {
             erros.add(new ErroMontador(contadorLinha, TipoErro.LINHA_LONGA));
         }
@@ -369,7 +395,7 @@ public class Montador {
         linha = linha.trim();
         return Arrays.asList(linha.split(" "));
     }
-    
+
     public boolean trataSimbolo(String palavra) {
         // verifica a sintaxe de nome para simbolos
         // e busca se o simbolo ja existe na tabela
@@ -385,7 +411,7 @@ public class Montador {
             return false;
         }
     }
-            
+
     private ModosEnderecamento verificaNumero(String palavra) {
         // retorna o modo de endereçamento de um operando
         // "64" -> direto
@@ -402,11 +428,9 @@ public class Montador {
         Matcher findCaracteres = caracteres.matcher(palavra);
         if (!findLetras.find() || !findCaracteres.find()) {
             return DIRETO;
-        }
-        else if (findIndireto.find()) {
+        } else if (findIndireto.find()) {
             return INDIRETO;
-        }
-        else if (findImediato.find()) {
+        } else if (findImediato.find()) {
             return IMEDIATO;
         }
         return null;

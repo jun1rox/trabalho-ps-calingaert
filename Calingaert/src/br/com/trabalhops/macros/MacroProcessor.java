@@ -16,7 +16,7 @@ import java.util.Stack;
  * @author Luzo
  */
 public class MacroProcessor {
-    
+
     private String path;  // setted by processMacros with "../test_macros.asm" for testing porpouses
     private final String outputFile = "./src/arquivos/MASMAPRG.ASM";
     private BufferedReader reader;
@@ -32,21 +32,21 @@ public class MacroProcessor {
     private String previousOpcode;
     private String newMacroDefinition;
     private String currentMacroCall;
-    
+
     public boolean processMacros(String path) throws IOException {
         System.out.println("===========MACRO LOGS============");
         this.path = path;
         this.reader = new BufferedReader(new FileReader(this.path));
         this.writer = new BufferedWriter(new FileWriter(this.outputFile));
-        
+
         this.definitionLevelCounter = 0;
         this.expansionLevelCounter = 0;
         this.previousOpcode = null;
         this.newMacroDefinition = null;
         this.currentMacroCall = null;
-        
+
         this.readLineInput();
-        
+
         while (this.line != null) {
             System.out.print(this.definitionLevelCounter);
             System.out.print(" ");
@@ -54,10 +54,9 @@ public class MacroProcessor {
             //System.out.println(this.words.get(1));
             if (this.words.get(1).equals("MACRO")) { // CASE opcode is "MACRO"
                 this.definitionLevelCounter += 1;
-                if (this.definitionLevelCounter == 1){
+                if (this.definitionLevelCounter == 1) {
                     //allocate new macro definition
-                }
-                else{
+                } else {
                     //write line to new macro definition
                     this.macroTable.get(this.newMacroDefinition).writeBody(this.line);
                 }
@@ -79,12 +78,11 @@ public class MacroProcessor {
                     //write line to new macro definition
                     this.macroTable.get(this.newMacroDefinition).writeBody(this.line);
                 }
-            }
-            else if (this.macroTable.containsKey(this.words.get(1))){ // CASE opcode is MACRO NAME
-                if (this.definitionLevelCounter == 0){
+            } else if (this.macroTable.containsKey(this.words.get(1))) { // CASE opcode is MACRO NAME
+                if (this.definitionLevelCounter == 0) {
                     this.currentMacroCall = this.words.get(1);
                     this.expansionLevelCounter += 1;
-                    
+
                     //prepare actual-parameter list
                     //push actual-parameter list on actual-parameter stack
                     String[] parameters = this.words.get(2).split(",");
@@ -95,10 +93,10 @@ public class MacroProcessor {
                     }
                     this.actualParameterStack.push(auxList);
                 }
-                if ((this.definitionLevelCounter > 0) && (this.expansionLevelCounter == 0)){
+                if ((this.definitionLevelCounter > 0) && (this.expansionLevelCounter == 0)) {
                     //replace each formal parameter by topmost corresponding '#(k,i)' from formal-parameter stack
                 }
-                if (this.definitionLevelCounter > 0){
+                if (this.definitionLevelCounter > 0) {
                     //write line to new macro definition
                     this.macroTable.get(this.newMacroDefinition).writeBody(this.line);
                 }
@@ -106,11 +104,10 @@ public class MacroProcessor {
             else if (this.words.get(1).equals("MEND")){ // CASE opcode is "MEND"
                 if (this.definitionLevelCounter == 0){
                     this.expansionLevelCounter -= 1;
-                    
+
                     //pop actual-parameter list (level of expansionLevelCounter) from actual parameter stack
-                }
-                else{ //definition mode
-                    if (this.expansionLevelCounter == 0){
+                } else { //definition mode
+                    if (this.expansionLevelCounter == 0) {
                         //pop formal-parameter stack (level definitionLevelCounter)
                         while(!this.formalParameterStack.isEmpty() && this.formalParameterStack.peek().getLevel() == this.definitionLevelCounter){
                             this.formalParameterStack.pop();
@@ -129,7 +126,7 @@ public class MacroProcessor {
                     //by topmost corresponging '#(k,i)'
                     //from formal-parameter stack
                 }
-                if(this.definitionLevelCounter == 0){
+                if (this.definitionLevelCounter == 0) {
                     //write line to output
                     System.out.println(this.line);
                     if (this.line.length() > 0){
@@ -143,7 +140,7 @@ public class MacroProcessor {
                 }
             }
 
-            if (this.expansionLevelCounter > 0){
+            if (this.expansionLevelCounter > 0) {
                 //read line from old macro definition named in current macro call
                 //System.out.println(this.currentMacroCall);
                 this.line = this.macroTable.get(this.currentMacroCall).getLine();
@@ -159,8 +156,7 @@ public class MacroProcessor {
                 //replace '#(k, i)' by
                 //if k=1 then actual-parameter list[i] from actual-parameter stack
                 //else '#(k-1, i)'
-            }
-            else{
+            } else {
                 this.readLineInput();
             }
             
@@ -183,15 +179,15 @@ public class MacroProcessor {
         System.out.println("===========MACRO LOGS============");
         return true;
     }
-    
-    public void readLineInput() throws IOException{
+
+    public void readLineInput() throws IOException {
         this.line = this.reader.readLine();
         this.lineCounter += 1;
-        
-        if (line == null){
+
+        if (line == null) {
             return;
         }
-        
+
         // discard comments
         if (this.line.split("\\*").length != 0){
             this.line = this.line.split("\\*")[0];
