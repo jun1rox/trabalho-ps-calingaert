@@ -13,7 +13,7 @@ public class Macro {
     
     public Macro(String[] parameters){
         this.parameters = parameters;
-        this.body = new ArrayList<String>();
+        this.body = new ArrayList<>();
         this.currentLine = 0;
     }
 
