@@ -35,12 +35,19 @@ public class Macro {
     
     public void writeBody(String line){
         this.body.add(line);
+//        for(int i = 0; i<this.body.size(); i++){;;
+//            System.out.println(this.body.get(i));
+//        }
     }
     
     public String getLine(){
         String line;
-        line = this.body.get(this.currentLine);
-        this.currentLine += 1;
+        if (currentLine < this.body.size()){
+            line = this.body.get(this.currentLine);
+            this.currentLine += 1;
+        }else{
+            line = null;
+        }
         return line;
     }
 }

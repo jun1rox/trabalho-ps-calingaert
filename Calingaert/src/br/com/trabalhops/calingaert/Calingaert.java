@@ -1,6 +1,7 @@
 package br.com.trabalhops.calingaert;
 
 import br.com.trabalhops.gui.Tela;
+import br.com.trabalhops.macros.MacroProcessor;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,9 @@ public class Calingaert {
         Registradores registradores = new Registradores();
         registradores.setPC(valor_pc);
         String caminho = "../fibonacci.txt";
+        
+        MacroProcessor macroProcessor = new MacroProcessor();
+        macroProcessor.processMacros("../test_macros2.txt");
 
         Montador montador = new Montador();
         montador.monta();
