@@ -2,6 +2,8 @@ package br.com.trabalhops.montador;
 
 import br.com.trabalhops.errors.ErroMontador;
 import br.com.trabalhops.errors.TipoErro;
+import br.com.trabalhops.ligador.TabelaDefinicoes;
+import br.com.trabalhops.ligador.TabelaUso;
 import br.com.trabalhops.montador.Instrucao.ModosEnderecamento;
 import static br.com.trabalhops.montador.Instrucao.ModosEnderecamento.*;
 import java.util.List;
@@ -27,6 +29,10 @@ public class Montador {
     private final Pattern numeros = Pattern.compile("\\d", Pattern.CASE_INSENSITIVE);
     private final List<ErroMontador> erros = new ArrayList<>();
     private final List<String> resultado = new ArrayList<>();
+    private final List<String> simbolosExternos = new ArrayList<>();
+    private final List<TabelaUso> tabelaUso = new ArrayList<>();
+    private final List<TabelaDefinicoes> tabelaDefinicoes = new ArrayList<>();
+    private String mapa_relocao = "";
     private int posInstrucao;
     private int contadorLinha = 0;
     private int posicao = 0;
@@ -47,7 +53,7 @@ public class Montador {
         this.buffWriterLst = new BufferedWriter(new FileWriter(saidaLst));
 
         linha = buffRead.readLine();
-        while (buffRead.ready() && faltaEnd) {
+        while (linha != null && faltaEnd) {
             this.linhaPrimeiraPassagem();
         }
         buffRead.close();
@@ -56,9 +62,6 @@ public class Montador {
             if (!s.isDefinido()) {
                 erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_NAO_DEFINIDO));
             }
-            System.out.println(s.getRotulo());
-            System.out.println(s.getEndereco());
-            System.out.println(s.isDefinido());
         }
 
         if (faltaEnd) {
@@ -71,16 +74,17 @@ public class Montador {
             this.posicao = 0;
             buffRead = new BufferedReader(new FileReader(this.caminho));
             linha = buffRead.readLine();
-            while (buffRead.ready()) {
+            faltaEnd = true;
+            while (linha != null && faltaEnd) {
                 this.linhaSegundaPassagem();
             }
             buffRead.close();
 
-            buffWriterObj.append("* file.obj\n");
+            buffWriterObj.append(this.resultado.size() + "\n");
+            buffWriterObj.append(mapa_relocao + "\n");
             for (String string : this.resultado) {
                 buffWriterObj.append(string + "\n");
             }
-            buffWriterObj.append("TAMANHO\n" + resultado.size());
         }
 
         if (erros.isEmpty()) {
@@ -112,6 +116,7 @@ public class Montador {
                 if ("START".equals(ins.getNome())) {
                     ins = instrucoes.getInstrucao(palavras.get(1));
                     if (ins != null) {
+                        linha = buffRead.readLine();
                         return;
                     }
                 }
@@ -128,10 +133,18 @@ public class Montador {
                 linha = buffRead.readLine();
                 return;
             }
-
+            if (ins.getNome().equals("EXTR")) {
+                // encontrou o EXTR adiciona na lista de simbolos externos
+                // ao encontrar um simbolo verificar a lista de simbolos externos
+                simbolosExternos.add(palavras.get(0));
+                linha = buffRead.readLine();
+                return;
+            }
             if (!existeSimbolo(palavras.get(0))) {
                 // testa se a primeira palavra é um simbolo ja definido
-                simbolos.add(new Simbolo(palavras.get(0), posicao, true));
+                if(!inSimbolosExternos(palavras.get(0))) {
+                    simbolos.add(new Simbolo(palavras.get(0), posicao, true));
+                }
             } else {
                 // se já existe, verifica se o simbolo está indefinido
                 boolean flag_indefinido = false;
@@ -141,6 +154,8 @@ public class Montador {
                         s.setDefinido(true);
                         s.setEndereco(posicao);
                     }
+                    //
+                    // FALTA ::: atualizar na tabela de definições
                 }
                 if (!flag_indefinido) {
                     // ERRO: simbolo redefinido (2x no lado esquerdo)
@@ -187,17 +202,24 @@ public class Montador {
                     this.faltaEnd = false;
                 }
                 case "START" -> {
-                    // variavel posição inicial?
-                    // POSICAO = OPERANDO?
+                    if(contadorLinha > 0) erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                 }
-                /* TABELAS DEFINIÇÃO/USO
                 case "EXTR" -> {
-                    
+                    // EXTR é tratado especialmente antes, então se chegar aqui (com posInstrucao = 0) é erro
+                    erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                 }
                 case "EXTDEF" -> {
-                    
+                    if(posInstrucao != 0 || palavras.size() != 2) {
+                        erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
+                    } else {
+                        // tabelaDefinicoes.add(nome, endereco, sinal); ?
+                        // vai na tabela de simbolos igual
+                        String op_1 = palavras.get(posInstrucao + 1);
+                        if (!trataSimbolo(op_1)) { // verifica o nome do simbolo e adiciona se não existe
+                            erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
+                        }
+                    }
                 }
-                 */
                 default -> {
                     erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                 }
@@ -208,22 +230,39 @@ public class Montador {
         if (numOperandos > 0) {
             posicao += 1;
             String op_1 = palavras.get(posInstrucao + 1);
+            int valor_op = 0;
             ModosEnderecamento modo_op1;
-            if (!trataSimbolo(op_1)) {
+            boolean ext_flag = inSimbolosExternos(op_1);
+            if (!trataSimbolo(op_1) && !ext_flag) { // nao é um simbolo interno/externo
                 modo_op1 = verificaNumero(op_1);
+                valor_op = Integer.parseInt(getValorNumero(op_1));
             } else {
                 modo_op1 = DIRETO;
+                if(ext_flag) { // é um simbolo externo
+                   //tabelaUso.add(nome, posicao);
+                }
             }
 
-            // FALTA: erro valor fora do limite
+            if(modo_op1 == IMEDIATO) {
+                // 2 ^ 16 | 0 a 65535
+                if(valor_op < 0 || valor_op > 65535) erros.add(new ErroMontador(contadorLinha, TipoErro.FORA_DOS_LIMITES));
+            } else if(modo_op1 == DIRETO) {
+                // 512 posições 0 a 511
+                if(valor_op < 0 || valor_op > 511) erros.add(new ErroMontador(contadorLinha, TipoErro.FORA_DOS_LIMITES));
+            }
+            
             if (ins.getNome().equals("COPY")) {
                 posicao += 1;
                 String op_2 = palavras.get(posInstrucao + 2);
                 ModosEnderecamento modo_op2;
-                if (!trataSimbolo(op_2)) {
+                ext_flag = inSimbolosExternos(op_2);
+                if (!trataSimbolo(op_2) && !ext_flag) {
                     modo_op2 = verificaNumero(op_2);
                 } else {
                     modo_op2 = DIRETO;
+                    if(ext_flag) { // é um simbolo externo
+                        //tabelaUso.add(nome, posicao);
+                    }
                 }
 
                 if (instrucoes.trataCopy(modo_op1, modo_op2) == -1) {
@@ -273,10 +312,7 @@ public class Montador {
                     resultado.add(preencheZeros(palavras.get(posInstrucao + 1)));
                 }
                 case "END" -> {
-                    // nao faz nada aqui eu acho
-                }
-                case "START" -> {
-                    // tmb nao faz nada eu acho
+                    faltaEnd = false;
                 }
                 /* TABELAS DEFINIÇÃO/USO
                 case "EXTR" -> {
@@ -288,6 +324,7 @@ public class Montador {
                  */
             }
         } else {
+            mapa_relocao += "0"; // instrução
             if (numOperandos > 0) {
                 boolean flagIsSimbolo_1 = false;
                 posicao += 1;
@@ -299,6 +336,8 @@ public class Montador {
                     flagIsSimbolo_1 = true;
                     modo_op1 = DIRETO;
                 }
+                if(modo_op1 == IMEDIATO) mapa_relocao += "0";
+                else mapa_relocao += "1";
 
                 if (ins.getNome().equals("COPY")) {
                     // se for COPY pega o segundo operando (apenas COPY tem dois operandos)
@@ -403,15 +442,20 @@ public class Montador {
         if (!findNumeros.find()) {       // VERIFICAR NOME DO SIMBOLO (PODE TER NUMEROS)
             if (!existeSimbolo(palavra)) {
                 simbolos.add(new Simbolo(palavra, 0));
-            } else {
-                // MAPA DE RELOCAÇÃO? O SIMBOLO JA TA DEFINIDO
-            }
+            } 
             return true;
         } else {
             return false;
         }
     }
 
+    private boolean inSimbolosExternos(String nome) {
+        for(String s : simbolosExternos) {
+            if(s.equals(nome)) return true;
+        }
+        return false;
+    }
+    
     private ModosEnderecamento verificaNumero(String palavra) {
         // retorna o modo de endereçamento de um operando
         // "64" -> direto
