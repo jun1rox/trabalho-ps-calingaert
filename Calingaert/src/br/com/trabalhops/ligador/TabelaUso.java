@@ -1,24 +1,41 @@
 package br.com.trabalhops.ligador;
 
-import br.com.trabalhops.montador.Simbolo;
-
 /**
  *
  * @author aluno
  */
-public class TabelaUso extends Tabela {
+public class TabelaUso {
     public enum Sinal {
         POSITIVO, NEGATIVO;
     }
     
     private Sinal sinal; //positivo -> true & negativo -> false
-
+    private String rotulo;
+    private String posicao;
+    
     public TabelaUso() {
     }
 
-    public TabelaUso(Simbolo simbolo, int endereco, Sinal sinal) {
-        super(simbolo, endereco);
+    public TabelaUso(String rotulo, String posicao, Sinal sinal) {
         this.sinal = sinal;
+        this.posicao = posicao;
+        this.rotulo = rotulo;
+    }
+
+    public String getRotulo() {
+        return rotulo;
+    }
+
+    public void setRotulo(String rotulo) {
+        this.rotulo = rotulo;
+    }
+
+    public String getPosicao() {
+        return posicao;
+    }
+
+    public void setPosicao(String posicao) {
+        this.posicao = posicao;
     }
 
     public Sinal isSinal() {

@@ -2,8 +2,10 @@ package br.com.trabalhops.montador;
 
 import br.com.trabalhops.errors.ErroMontador;
 import br.com.trabalhops.errors.TipoErro;
+import static br.com.trabalhops.ligador.Modo.*;
 import br.com.trabalhops.ligador.TabelaDefinicoes;
 import br.com.trabalhops.ligador.TabelaUso;
+import static br.com.trabalhops.ligador.TabelaUso.Sinal.*;
 import br.com.trabalhops.montador.Instrucao.ModosEnderecamento;
 import static br.com.trabalhops.montador.Instrucao.ModosEnderecamento.*;
 import java.util.List;
@@ -153,6 +155,11 @@ public class Montador {
                         flag_indefinido = true;
                         s.setDefinido(true);
                         s.setEndereco(posicao);
+                        for(TabelaDefinicoes t : tabelaDefinicoes) {
+                            if (s.getRotulo().equals(palavras.get(0))) {
+                                t.setEndereco(Integer.toString(posicao));
+                            }
+                        }
                     }
                     //
                     // FALTA ::: atualizar na tabela de definições
@@ -212,9 +219,9 @@ public class Montador {
                     if(posInstrucao != 0 || palavras.size() != 2) {
                         erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                     } else {
-                        // tabelaDefinicoes.add(nome, endereco, sinal); ?
                         // vai na tabela de simbolos igual
                         String op_1 = palavras.get(posInstrucao + 1);
+                        tabelaDefinicoes.add(new TabelaDefinicoes(op_1, "0", RELATIVO));
                         if (!trataSimbolo(op_1)) { // verifica o nome do simbolo e adiciona se não existe
                             erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
                         }
@@ -239,7 +246,7 @@ public class Montador {
             } else {
                 modo_op1 = DIRETO;
                 if(ext_flag) { // é um simbolo externo
-                   //tabelaUso.add(nome, posicao);
+                   tabelaUso.add(new TabelaUso(op_1, Integer.toString(posicao), POSITIVO));
                 }
             }
 
@@ -261,7 +268,7 @@ public class Montador {
                 } else {
                     modo_op2 = DIRETO;
                     if(ext_flag) { // é um simbolo externo
-                        //tabelaUso.add(nome, posicao);
+                        tabelaUso.add(new TabelaUso(op_2, Integer.toString(posicao), POSITIVO));
                     }
                 }
 
@@ -314,24 +321,26 @@ public class Montador {
                 case "END" -> {
                     faltaEnd = false;
                 }
-                /* TABELAS DEFINIÇÃO/USO
-                case "EXTR" -> {
-                    
-                }
-                case "EXTDEF" -> {
-                    
-                }
-                 */
+                case "EXTR" -> {}
+                case "EXTDEF" -> {}
+                default -> {}
             }
         } else {
             mapa_relocao += "0"; // instrução
             if (numOperandos > 0) {
+                Simbolo s;
                 boolean flagIsSimbolo_1 = false;
+                boolean ext_flag_1 = false;
+                boolean ext_flag_2 = false;
+                boolean flagIsSimbolo_2 = false;
                 posicao += 1;
                 String op_1 = palavras.get(posInstrucao + 1);
                 ModosEnderecamento modo_op1;
-                if (!trataSimbolo(op_1)) {
+                if (!existeSimbolo(op_1)) {
                     modo_op1 = verificaNumero(op_1);
+                } else if(inSimbolosExternos(op_1)) {
+                    ext_flag_1 = true;
+                    modo_op1 = DIRETO;
                 } else {
                     flagIsSimbolo_1 = true;
                     modo_op1 = DIRETO;
@@ -347,23 +356,52 @@ public class Montador {
                     ModosEnderecamento modo_op2;
                     if (!existeSimbolo(op_2)) {
                         modo_op2 = verificaNumero(op_2);
+                    } else if(inSimbolosExternos(op_1)) {
+                        ext_flag_2 = true;
+                        modo_op2 = DIRETO;
                     } else {
+                        flagIsSimbolo_2 = true;
                         modo_op2 = DIRETO; // simbolo é um endereço direto
                     }
                     // escreve o código do copy conforme os operandos
                     resultado.add(preencheZeros(instrucoes.trataCopy(modo_op1, modo_op2).toString()));
+                    if (flagIsSimbolo_1) {
+                        s = getSimbolo(op_1);
+                        resultado.add(preencheZeros(s.getEnderecoString()));
+                    } else {
+                        if(ext_flag_1) {
+                            resultado.add("XXX");
+                        } else {
+                            resultado.add(preencheZeros(getValorNumero(op_1)));
+                        }
+                    }
+                    if (flagIsSimbolo_2) {
+                        s = getSimbolo(op_2);
+                        resultado.add(preencheZeros(s.getEnderecoString()));
+                    } else {
+                        if(ext_flag_2) {
+                            resultado.add("XXX");
+                        } else {
+                            resultado.add(preencheZeros(getValorNumero(op_2)));
+                        }
+                    }
+
                 } else {
                     // NÃO É O COPY SEGUIR NORMALMENTE
                     // escreve o código da instrução conforme o modo de endereçamento do operando
                     resultado.add(preencheZeros(ins.getCodigoMontado(modo_op1)));
                     if (flagIsSimbolo_1) {
-                        Simbolo s = getSimbolo(op_1);
+                        s = getSimbolo(op_1);
                         // escreve o endereço do operando simbolo
                         resultado.add(preencheZeros(s.getEnderecoString()));
                     } else {
                         // FALTA: se for imediato não vai para o mapa de relocação
                         // escreve o valor do operando
-                        resultado.add(preencheZeros(getValorNumero(op_1)));
+                        if(ext_flag_1) {
+                            resultado.add("XXX");
+                        } else {
+                            resultado.add(preencheZeros(getValorNumero(op_1)));
+                        }
                     }
                 }
             } else {
