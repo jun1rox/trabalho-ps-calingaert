@@ -46,6 +46,7 @@ public class Macro {
             line = this.body.get(this.currentLine);
             this.currentLine += 1;
         }else{
+            this.currentLine = 0;
             line = null;
         }
         return line;
