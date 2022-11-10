@@ -26,9 +26,13 @@ public class Calingaert {
         
         MacroProcessor macroProcessor = new MacroProcessor();
         macroProcessor.processMacros("../test_macros2.txt");
-
         Montador montador = new Montador();
-        montador.monta();
+        
+        String caminho_1 = "../ligador1.asm";
+        String caminho_2 = "../ligador2.asm";
+        
+        montador.monta(caminho_1);
+        if(caminho_2.length() > 0) montador.monta(caminho_2);
 
         memoria.carregaPrograma(caminho);
 

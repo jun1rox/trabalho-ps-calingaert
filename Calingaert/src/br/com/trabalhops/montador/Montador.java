@@ -11,6 +11,7 @@ import static br.com.trabalhops.montador.Instrucao.ModosEnderecamento.*;
 import java.util.List;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -24,8 +25,6 @@ import java.util.regex.Pattern;
  * @author junio
  */
 public class Montador {
-
-    private final String caminho = "../teste.asm";
     private final Instrucoes instrucoes = new Instrucoes();
     private final List<Simbolo> simbolos = new ArrayList<>();
     private final Pattern numeros = Pattern.compile("\\d", Pattern.CASE_INSENSITIVE);
@@ -45,12 +44,21 @@ public class Montador {
 
     private BufferedWriter buffWriterObj, buffWriterLst;
 
-    private final String saidaObj = "./src/arquivos/file.obj";
-    private final String saidaLst = "./src/arquivos/file.lst";
-
-    public boolean monta() throws IOException {
-        buffRead = new BufferedReader(new FileReader(this.caminho));
-
+    public boolean monta(String caminho) throws IOException {
+        reset();
+        
+        String caminhoSemExtensao = caminho.split(".asm")[0];
+        String[] nomes = caminhoSemExtensao.split("/");
+        String nome = nomes[nomes.length - 1];
+        String saidaObj = "./src/arquivos/" + nome + ".obj";
+        String saidaLst = "./src/arquivos/" + nome + ".lst";
+        
+        File objFile = new File(saidaObj);
+        objFile.createNewFile();
+        File lstFile = new File(saidaLst);
+        lstFile.createNewFile();
+        
+        buffRead = new BufferedReader(new FileReader(caminho));
         this.buffWriterObj = new BufferedWriter(new FileWriter(saidaObj));
         this.buffWriterLst = new BufferedWriter(new FileWriter(saidaLst));
 
@@ -61,11 +69,18 @@ public class Montador {
         buffRead.close();
 
         for (Simbolo s : simbolos) {
+            System.out.println(s.getRotulo());
+            System.out.println(s.isDefinido());
             if (!s.isDefinido()) {
                 erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_NAO_DEFINIDO));
             }
         }
-
+        
+        for (TabelaDefinicoes s : tabelaDefinicoes) {
+            System.out.println(s.getRotulo());
+            System.out.println(s.getEndereco());
+        }
+        System.out.println("FIM");
         if (faltaEnd) {
             erros.add(new ErroMontador(contadorLinha, TipoErro.FALTA_END));
         }
@@ -74,7 +89,7 @@ public class Montador {
         if (this.erros.isEmpty()) {
             this.contadorLinha = 0;
             this.posicao = 0;
-            buffRead = new BufferedReader(new FileReader(this.caminho));
+            buffRead = new BufferedReader(new FileReader(caminho));
             linha = buffRead.readLine();
             faltaEnd = true;
             while (linha != null && faltaEnd) {
@@ -82,8 +97,21 @@ public class Montador {
             }
             buffRead.close();
 
+            
+            buffWriterObj.append("TAMANHO\n");
             buffWriterObj.append(this.resultado.size() + "\n");
+            buffWriterObj.append("MAPA\n");
             buffWriterObj.append(mapa_relocao + "\n");
+            buffWriterObj.append("TABELA_USO\n");
+            for (TabelaUso tab : this.tabelaUso) {
+                buffWriterObj.append(tab.getRotulo() + " " + tab.getPosicao() + "\n");
+            }
+            buffWriterObj.append("***\n");
+            buffWriterObj.append("TABELA_DEFINICAO\n");
+            for (TabelaDefinicoes tab : this.tabelaDefinicoes) {
+                buffWriterObj.append(tab.getRotulo() + " " + tab.getEndereco() + "\n");
+            }
+            buffWriterObj.append("***\n");
             for (String string : this.resultado) {
                 buffWriterObj.append(string + "\n");
             }
@@ -161,8 +189,6 @@ public class Montador {
                             }
                         }
                     }
-                    //
-                    // FALTA ::: atualizar na tabela de definições
                 }
                 if (!flag_indefinido) {
                     // ERRO: simbolo redefinido (2x no lado esquerdo)
@@ -177,20 +203,13 @@ public class Montador {
 
         int numOperandos = ins.getNumOperandos();
         int operandoAmount = palavras.size() - numOperandos;
-
-        if (operandoAmount > posInstrucao + 1) {
+        if (operandoAmount > posInstrucao + 1 || operandoAmount < posInstrucao + 1) {
             // ERRO: INSTRUÇÃO TEM OPERANDOS DEMAIS
             erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
-            System.out.println(1);
             linha = buffRead.readLine();
             return;
         }
-        if (operandoAmount < posInstrucao + 1) {
-            // ERRO: INSTRUÇÃO TEM POUCOS OPERANDOS
-            erros.add(new ErroMontador(contadorLinha, TipoErro.ERRO_SINTAXE));
-            linha = buffRead.readLine();
-            return;
-        }
+
         if (ins.isPseudoInstrucao()) {
             switch (ins.getNome()) {
                 case "SPACE" -> {
@@ -263,7 +282,7 @@ public class Montador {
                 String op_2 = palavras.get(posInstrucao + 2);
                 ModosEnderecamento modo_op2;
                 ext_flag = inSimbolosExternos(op_2);
-                if (!trataSimbolo(op_2) && !ext_flag) {
+                if (!ext_flag && !trataSimbolo(op_2)) {
                     modo_op2 = verificaNumero(op_2);
                 } else {
                     modo_op2 = DIRETO;
@@ -335,15 +354,14 @@ public class Montador {
                 boolean flagIsSimbolo_2 = false;
                 posicao += 1;
                 String op_1 = palavras.get(posInstrucao + 1);
-                ModosEnderecamento modo_op1;
-                if (!existeSimbolo(op_1)) {
-                    modo_op1 = verificaNumero(op_1);
-                } else if(inSimbolosExternos(op_1)) {
+                ModosEnderecamento modo_op1 = DIRETO;
+                
+                if(inSimbolosExternos(op_1)) {
                     ext_flag_1 = true;
-                    modo_op1 = DIRETO;
+                } else if (!existeSimbolo(op_1)) {
+                    modo_op1 = verificaNumero(op_1);
                 } else {
                     flagIsSimbolo_1 = true;
-                    modo_op1 = DIRETO;
                 }
                 if(modo_op1 == IMEDIATO) mapa_relocao += "0";
                 else mapa_relocao += "1";
@@ -353,17 +371,19 @@ public class Montador {
                     // e 6 combinações de operandos
                     posicao += 1;
                     String op_2 = palavras.get(posInstrucao + 2);
-                    ModosEnderecamento modo_op2;
-                    if (!existeSimbolo(op_2)) {
-                        modo_op2 = verificaNumero(op_2);
-                    } else if(inSimbolosExternos(op_1)) {
+                    ModosEnderecamento modo_op2 = DIRETO;
+                    if(inSimbolosExternos(op_2)) {
                         ext_flag_2 = true;
-                        modo_op2 = DIRETO;
+                    } else if (!existeSimbolo(op_2)) {
+                        modo_op2 = verificaNumero(op_2);
                     } else {
                         flagIsSimbolo_2 = true;
-                        modo_op2 = DIRETO; // simbolo é um endereço direto
                     }
+                    if(modo_op2 == IMEDIATO) mapa_relocao += "0";
+                    else mapa_relocao += "1";
                     // escreve o código do copy conforme os operandos
+                    System.out.println(modo_op1);
+                    System.out.println(modo_op2);
                     resultado.add(preencheZeros(instrucoes.trataCopy(modo_op1, modo_op2).toString()));
                     if (flagIsSimbolo_1) {
                         s = getSimbolo(op_1);
@@ -518,4 +538,17 @@ public class Montador {
         return null;
     }
 
+    public void reset() {
+        this.contadorLinha = 0;
+        this.erros.clear();
+        this.simbolos.clear();
+        this.simbolosExternos.clear();
+        this.tabelaUso.clear();
+        this.tabelaDefinicoes.clear();
+        this.faltaEnd = true;
+        this.mapa_relocao = "";
+        this.posicao = 0;
+        this.resultado.clear();
+        
+    }
 }
