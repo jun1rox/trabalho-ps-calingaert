@@ -1,6 +1,7 @@
 package br.com.trabalhops.calingaert;
 
 import br.com.trabalhops.gui.Tela;
+import br.com.trabalhops.ligador.Ligador;
 import br.com.trabalhops.macros.MacroProcessor;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -27,13 +28,17 @@ public class Calingaert {
         MacroProcessor macroProcessor = new MacroProcessor();
         macroProcessor.processMacros("../test_macros2.txt");
         Montador montador = new Montador();
+        Ligador ligador = new Ligador();
         
         String caminho_1 = "../ligador1.asm";
         String caminho_2 = "../ligador2.asm";
+        String caminho_obj_1 = "./src/arquivos/ligador1.obj";
+        String caminho_obj_2 = "./src/arquivos/ligador2.obj";
         
         montador.monta(caminho_1);
         if(caminho_2.length() > 0) montador.monta(caminho_2);
-
+        ligador.liga(caminho_obj_1, caminho_obj_2);
+        
         memoria.carregaPrograma(caminho);
 
         Tela tela = new Tela(registradores, memoria);

@@ -33,7 +33,7 @@ public class Montador {
     private final List<String> simbolosExternos = new ArrayList<>();
     private final List<TabelaUso> tabelaUso = new ArrayList<>();
     private final List<TabelaDefinicoes> tabelaDefinicoes = new ArrayList<>();
-    private String mapa_relocao = "";
+    private String mapa_relocacao = "";
     private int posInstrucao;
     private int contadorLinha = 0;
     private int posicao = 0;
@@ -69,8 +69,6 @@ public class Montador {
         buffRead.close();
 
         for (Simbolo s : simbolos) {
-            System.out.println(s.getRotulo());
-            System.out.println(s.isDefinido());
             if (!s.isDefinido()) {
                 erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_NAO_DEFINIDO));
             }
@@ -101,7 +99,7 @@ public class Montador {
             buffWriterObj.append("TAMANHO\n");
             buffWriterObj.append(this.resultado.size() + "\n");
             buffWriterObj.append("MAPA\n");
-            buffWriterObj.append(mapa_relocao + "\n");
+            buffWriterObj.append(mapa_relocacao + "\n");
             buffWriterObj.append("TABELA_USO\n");
             for (TabelaUso tab : this.tabelaUso) {
                 buffWriterObj.append(tab.getRotulo() + " " + tab.getPosicao() + "\n");
@@ -332,9 +330,11 @@ public class Montador {
                     for (int i = 0; i < 3; ++i) {
                         resultado.add("000");
                     }
+                    mapa_relocacao += "000";
                 }
                 case "CONST" -> {
                     //bota direto pq ja verificou o operando
+                    mapa_relocacao += "0";
                     resultado.add(preencheZeros(palavras.get(posInstrucao + 1)));
                 }
                 case "END" -> {
@@ -345,7 +345,7 @@ public class Montador {
                 default -> {}
             }
         } else {
-            mapa_relocao += "0"; // instrução
+            mapa_relocacao += "0"; // instrução
             if (numOperandos > 0) {
                 Simbolo s;
                 boolean flagIsSimbolo_1 = false;
@@ -363,8 +363,8 @@ public class Montador {
                 } else {
                     flagIsSimbolo_1 = true;
                 }
-                if(modo_op1 == IMEDIATO) mapa_relocao += "0";
-                else mapa_relocao += "1";
+                if(modo_op1 == IMEDIATO) mapa_relocacao += "0";
+                else mapa_relocacao += "1";
 
                 if (ins.getNome().equals("COPY")) {
                     // se for COPY pega o segundo operando (apenas COPY tem dois operandos)
@@ -379,11 +379,9 @@ public class Montador {
                     } else {
                         flagIsSimbolo_2 = true;
                     }
-                    if(modo_op2 == IMEDIATO) mapa_relocao += "0";
-                    else mapa_relocao += "1";
+                    if(modo_op2 == IMEDIATO) mapa_relocacao += "0";
+                    else mapa_relocacao += "1";
                     // escreve o código do copy conforme os operandos
-                    System.out.println(modo_op1);
-                    System.out.println(modo_op2);
                     resultado.add(preencheZeros(instrucoes.trataCopy(modo_op1, modo_op2).toString()));
                     if (flagIsSimbolo_1) {
                         s = getSimbolo(op_1);
@@ -546,7 +544,7 @@ public class Montador {
         this.tabelaUso.clear();
         this.tabelaDefinicoes.clear();
         this.faltaEnd = true;
-        this.mapa_relocao = "";
+        this.mapa_relocacao = "";
         this.posicao = 0;
         this.resultado.clear();
         
