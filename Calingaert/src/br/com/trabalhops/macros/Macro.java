@@ -33,6 +33,14 @@ public class Macro {
         this.body = body;
     }
     
+    public int getCurrentLine() {
+        return currentLine;
+    }
+
+    public void setCurrentLine(int currentLine) {
+        this.currentLine = currentLine;
+    }
+    
     public void writeBody(String line){
         this.body.add(line);
 //        for(int i = 0; i<this.body.size(); i++){;;

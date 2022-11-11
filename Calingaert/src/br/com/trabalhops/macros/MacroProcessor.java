@@ -31,11 +31,9 @@ public class MacroProcessor {
     private Stack<ArrayList<String>> actualParameterStack = new Stack<>();
     private String previousOpcode;
     private String newMacroDefinition;
-    private String currentMacroCall;
     private Stack<String> macroCallStack = new Stack<>();
 
     public boolean processMacros(String path) throws IOException {
-        System.out.println("===========MACRO LOGS============");
         this.path = path;
         this.reader = new BufferedReader(new FileReader(this.path));
         this.writer = new BufferedWriter(new FileWriter(this.outputFile));
@@ -44,15 +42,10 @@ public class MacroProcessor {
         this.expansionLevelCounter = 0;
         this.previousOpcode = null;
         this.newMacroDefinition = null;
-        this.currentMacroCall = null;
 
         this.readLineInput();
 
         while (this.line != null) {
-            System.out.print(this.definitionLevelCounter);
-            System.out.print(" ");
-            System.out.println(this.expansionLevelCounter);
-            System.out.println(this.words.size());
             if (this.words.get(1).equals("MACRO")) { // CASE opcode is "MACRO"
                 this.definitionLevelCounter += 1;
                 if (this.definitionLevelCounter == 1) {
@@ -81,26 +74,43 @@ public class MacroProcessor {
                 }
             } else if (this.macroTable.containsKey(this.words.get(1))) { // CASE opcode is MACRO NAME
                 if (this.definitionLevelCounter == 0) {
-                    //this.currentMacroCall = this.words.get(1);
                     this.macroCallStack.add(this.words.get(1));
-//                    this.macroCallStack.add(this.words.get(1));
                     this.expansionLevelCounter += 1;
 
                     //prepare actual-parameter list
                     //push actual-parameter list on actual-parameter stack
                     String[] parameters = this.words.get(2).split(",");
                     ArrayList<String> auxList = new ArrayList<String>();
-                    auxList.add(Integer.toString(this.lineCounter));
+                    if (this.expansionLevelCounter > 1){
+                        auxList.add(Integer.toString(this.macroTable.get(this.macroCallStack.peek()).getCurrentLine()));
+                    }else{
+                        auxList.add(Integer.toString(this.lineCounter));
+                    }
+                    //auxList.add(Integer.toString(this.lineCounter));
                     for (int i = 0; i < parameters.length; i++){
                         auxList.add(parameters[i]);
                     }
                     this.actualParameterStack.push(auxList);
-                    for (int i = 0; i < auxList.size(); i++){
-                      System.out.println(auxList.get(i));
-                    }
                 }
                 if ((this.definitionLevelCounter > 0) && (this.expansionLevelCounter == 0)) {
+                    String[] parameters = this.words.get(2).split(",");
+                    Parameters newParameter = null;
+                    String loopParameter;
                     //replace each formal parameter by topmost corresponding '#(k,i)' from formal-parameter stack
+                    for (int i = 0; i < parameters.length; i++){
+                        loopParameter = parameters[i];
+                        newParameter = null;
+                        for (int j = this.formalParameterStack.size() - 1; j > -1; j--){
+                            if(this.formalParameterStack.get(j).getName().equals(loopParameter)){
+                                newParameter = this.formalParameterStack.get(j);
+                                break;
+                            }
+                        }
+                        
+                        if (newParameter != null){
+                            parameters[i] = "#(" + newParameter.getLevel() + ";" + (newParameter.getPosition() + 1) + ")";
+                        }
+                    }
                 }
                 if (this.definitionLevelCounter > 0) {
                     //write line to new macro definition
@@ -143,9 +153,8 @@ public class MacroProcessor {
                         }
                         
                         if (newParameter != null){
-                            parameters[i] = "#(" + newParameter.getLevel() + "," + (newParameter.getPosition() + 1) + ")";
+                            parameters[i] = "#(" + newParameter.getLevel() + ";" + (newParameter.getPosition() + 1) + ")";
                         }
-                        //System.out.println(parameters[i]);
                     }
                 }
                 if (this.definitionLevelCounter == 0) {
@@ -162,17 +171,20 @@ public class MacroProcessor {
                     //write line to new macro definition
                     this.words.set(2, String.join(",", parameters));
                     this.line = String.join(" ", this.words);
+                    this.line = this.line.trim();
                     this.macroTable.get(this.newMacroDefinition).writeBody(this.line);
                 }
             }
 
             if (this.expansionLevelCounter > 0) {
-//                String[] parameters = this.words.get(2).split(",");
-//                Parameters newParameter = null;
-//                String loopParameter;
                 //read line from old macro definition named in current macro call
-                //this.line = this.macroTable.get(this.currentMacroCall).getLine();
-                this.line = this.macroTable.get(this.macroCallStack.peek()).getLine();
+                
+                do{
+                    this.line = this.macroTable.get(this.macroCallStack.peek()).getLine();
+                    if (this.line != null){
+                        break;
+                    }
+                } while(!this.macroCallStack.isEmpty());
                 
                 if (this.line != null){
                     this.previousOpcode = this.words.get(1);
@@ -196,29 +208,28 @@ public class MacroProcessor {
                     this.readLineInput();
                 }
                 
-                String[] parameters = this.words.get(2).split("#");
-                parameters  = Arrays.copyOfRange(parameters, 1, parameters.length);
-                for (int i = 0; i < parameters.length; i++){
-                    parameters[i] = '#' + parameters[i];
-                }
-                
                 //replace '#(k, i)' by
                 //if k=1 then actual-parameter list[i] from actual-parameter stack
                 //else '#(k-1, i)'
-                
-                
-                for (int i = 0; i < parameters.length; i++){
-                    char k = parameters[i].charAt(2);
-                    if (k == '1'){
-                        parameters[i] = this.actualParameterStack.peek().get(i + 1);
-                    }else {
-                        parameters[i] = parameters[i].substring(0, 2) +
-                                (Integer.parseInt(parameters[i].substring(2, 3)) - 1) +
-                                parameters[i].substring(3, 6);
+                if (this.words.get(2).contains("#")){
+                    String[] parameters = this.words.get(2).split(",");
+
+                    for (int i = 0; i < parameters.length; i++){
+                        if (parameters[i].contains("#")){
+                            char k = parameters[i].charAt(2);
+                            int i2 = Character.getNumericValue(parameters[i].charAt(4));
+                            if (k == '1'){
+                                parameters[i] = this.actualParameterStack.peek().get(i2 - 1);
+                            }else {
+                                parameters[i] = parameters[i].substring(0, 2) +
+                                        (Integer.parseInt(parameters[i].substring(2, 3)) - 1) +
+                                        parameters[i].substring(3, 6);
+                            }
+                        }
                     }
+
+                    this.words.set(2, String.join(",", parameters));   
                 }
-                
-                this.words.set(2, String.join(",", parameters));
                 
             } else {
                 this.readLineInput();
@@ -257,10 +268,19 @@ public class MacroProcessor {
 //                }
 //                System.out.println("=====");
 //            }
-//            System.out.println(this.line);
+//            if(this.actualParameterStack.size() > 1){
+//            System.out.println("Stack Parameters =======");
+//            for(int i = 0; i < this.actualParameterStack.size();i ++){
+//                System.out.println(i+"=======");
+//                for(int j = 0; j < this.actualParameterStack.get(i).size(); j++){
+//                    System.out.println(this.actualParameterStack.get(i).get(j));
+//                }
+//            }
+//            System.out.println("=======");
+//            //System.out.println("stack size: " + this.actualParameterStack.size());   
+//            }
         }
         this.writer.close();
-        System.out.println("===========MACRO LOGS============");
         return true;
     }
 
