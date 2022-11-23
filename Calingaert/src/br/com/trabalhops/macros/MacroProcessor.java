@@ -165,7 +165,9 @@ public class MacroProcessor {
                     if (this.words.get(0).isEmpty()){
                         this.line = this.line.substring(1);
                     }
-                    this.writer.append(this.line + "\n");
+                    if (!this.line.equals(" ")){
+                        this.writer.append(this.line + "\n");
+                    }
                 }
                 else{
                     //write line to new macro definition
@@ -230,55 +232,9 @@ public class MacroProcessor {
 
                     this.words.set(2, String.join(",", parameters));   
                 }
-                
             } else {
                 this.readLineInput();
             }
-            
-            //macro dubug
-//            if (this.macroTable.get("MULTSC") != null){
-//                List<String> teste = this.macroTable.get("MULTSC").getBody();
-//                System.out.println("Macro MULTSC =====");
-//                for(int i = 0; i<teste.size(); i++){
-//                    System.out.println(teste.get(i));
-//                }
-//                System.out.println("=====");
-//            } 
-//            if (this.macroTable.get("DIVSC") != null){
-//                List<String> teste = this.macroTable.get("DIVSC").getBody();
-//                System.out.println("Macro DIVSC =====");
-//                for(int i = 0; i<teste.size(); i++){
-//                    System.out.println(teste.get(i));
-//                }
-//                System.out.println("=====");
-//            }
-//            if (this.macroTable.get("SCALE") != null){
-//                List<String> teste = this.macroTable.get("SCALE").getBody();
-//                System.out.println("Macro SCALE =====");
-//                for(int i = 0; i<teste.size(); i++){
-//                    System.out.println(teste.get(i));
-//                }
-//                System.out.println("=====");
-//            }
-//            if (this.macroTable.get("DISCR") != null){
-//                List<String> teste = this.macroTable.get("DISCR").getBody();
-//                System.out.println("Macro DISCR =====");
-//                for(int i = 0; i<teste.size(); i++){
-//                    System.out.println(teste.get(i));
-//                }
-//                System.out.println("=====");
-//            }
-//            if(this.actualParameterStack.size() > 1){
-//            System.out.println("Stack Parameters =======");
-//            for(int i = 0; i < this.actualParameterStack.size();i ++){
-//                System.out.println(i+"=======");
-//                for(int j = 0; j < this.actualParameterStack.get(i).size(); j++){
-//                    System.out.println(this.actualParameterStack.get(i).get(j));
-//                }
-//            }
-//            System.out.println("=======");
-//            //System.out.println("stack size: " + this.actualParameterStack.size());   
-//            }
         }
         this.writer.close();
         return true;
@@ -316,8 +272,6 @@ public class MacroProcessor {
                 this.words.set(1, this.line.split(" ")[1]);
                 this.words.set(2, this.line.split(" ")[2]);
             }
-
-            //this.words = Arrays.asList(this.line.split(" "));
         }else {
             this.line = "";
             this.previousOpcode = this.words.get(1);
@@ -325,6 +279,5 @@ public class MacroProcessor {
             this.words.set(1, "");
             this.words.set(2, "");
         }
-        
     }
 }
