@@ -398,6 +398,7 @@ public class Tela extends javax.swing.JFrame {
                     ligador.liga("./src/arquivos/MASMAPRG1.obj");
                 }
             }
+            memoria.carregaPrograma("./src/arquivos/output.txt");
         } catch (IOException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }

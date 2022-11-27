@@ -23,23 +23,7 @@ public class Calingaert {
         int valor_pc = memoria.getINICIO_INS_DADOS();
         Registradores registradores = new Registradores();
         registradores.setPC(valor_pc);
-        String caminho = "../fibonacci.txt";
         
-        
-        Montador montador = new Montador();
-        Ligador ligador = new Ligador();
-        
-        String caminho_1 = "../ligador1.asm";
-        String caminho_2 = "../ligador2.asm";
-        String caminho_obj_1 = "./src/arquivos/ligador1.obj";
-        String caminho_obj_2 = "./src/arquivos/ligador2.obj";
-        
-        montador.monta(caminho_1);
-        if(caminho_2.length() > 0) montador.monta(caminho_2);
-        ligador.liga(caminho_obj_1, caminho_obj_2);
-        
-        memoria.carregaPrograma(caminho);
-
         Tela tela = new Tela(registradores, memoria);
 
         ImageIcon img = new ImageIcon("../calingas.png");

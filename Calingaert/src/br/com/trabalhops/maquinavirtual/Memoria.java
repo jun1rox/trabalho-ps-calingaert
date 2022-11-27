@@ -20,7 +20,7 @@ public class Memoria {
     private final int TAMANHO_MEMORIA = 512;
     private final int INICIO_INS_DADOS = 7;
     public String programaCarregado;
-    
+
     public Memoria() {
         this.dados = new String[this.TAMANHO_MEMORIA];
 
@@ -32,7 +32,7 @@ public class Memoria {
         Arrays.fill(this.dados, "0000000000000000");
         this.dados[1] = this.TAMANHO_PILHA;
     }
-    
+
     public String[] getDados() { //ve a dados inteira
         return this.dados;
     }
@@ -64,14 +64,20 @@ public class Memoria {
     public void carregaPrograma(String caminho) throws FileNotFoundException, IOException {
         programaCarregado = caminho;
         BufferedReader buffRead = new BufferedReader(new FileReader(caminho));
+        String mapa = buffRead.readLine();
         String linha = buffRead.readLine();
         int i = this.INICIO_INS_DADOS;
+        int j = 0;
         while (linha != null) {
-            for (String s : linha.split(" ")) {
-                int val = Integer.parseInt(s);
-                this.dados[i] = utils.intToBinaryString(val, 16);
-                i++;
-            }
+    
+            int val = Integer.parseInt(linha);
+            if (mapa.charAt(j) == '1') {
+              val += this.INICIO_INS_DADOS;  
+            } 
+            this.dados[i] = utils.intToBinaryString(val, 16);
+            i++;
+            j++;
+
             linha = buffRead.readLine();
         }
     }

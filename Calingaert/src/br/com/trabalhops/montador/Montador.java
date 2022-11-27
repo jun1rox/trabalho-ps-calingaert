@@ -68,9 +68,16 @@ public class Montador {
         }
         buffRead.close();
 
+        for (TabelaUso s : tabelaUso) {
+            System.out.println(s.getRotulo());
+            System.out.println(s.getPosicao());
+        }
+        
         for (Simbolo s : simbolos) {
             if (!s.isDefinido()) {
                 erros.add(new ErroMontador(contadorLinha, TipoErro.SIMBOLO_NAO_DEFINIDO));
+                System.out.println(s.getRotulo());
+                
             }
         }
         
@@ -182,7 +189,7 @@ public class Montador {
                         s.setDefinido(true);
                         s.setEndereco(posicao);
                         for(TabelaDefinicoes t : tabelaDefinicoes) {
-                            if (s.getRotulo().equals(palavras.get(0))) {
+                            if (s.getRotulo().equals(t.getRotulo())) {
                                 t.setEndereco(Integer.toString(posicao));
                             }
                         }
