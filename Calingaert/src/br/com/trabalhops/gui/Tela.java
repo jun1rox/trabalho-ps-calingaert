@@ -1,14 +1,20 @@
 package br.com.trabalhops.gui;
 
+import br.com.trabalhops.ligador.Ligador;
+import br.com.trabalhops.macros.MacroProcessor;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import br.com.trabalhops.maquinavirtual.Instrucoes;
 import br.com.trabalhops.maquinavirtual.Memoria;
 import br.com.trabalhops.maquinavirtual.Registradores;
+import br.com.trabalhops.montador.Montador;
+import java.io.File;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -22,11 +28,14 @@ public class Tela extends javax.swing.JFrame {
     public Memoria memoria;
     public Dados dados;
 
+    public String caminho1 = "";
+    public String caminho2 = "";
+
     public Tela(Registradores registradores, Memoria memoria) {
         this.registradores = registradores;
         this.memoria = memoria;
         this.dados = new Dados();
-        
+
         initComponents();
         console.setEditable(false);
         selectStepDuration.setVisible(false);
@@ -43,7 +52,7 @@ public class Tela extends javax.swing.JFrame {
 
     public void preencheTabela(Memoria memoria) {
         String colunas[] = {"Endereço", "Valor"};
-            
+
         DefaultTableModel model = new DefaultTableModel(dados.criaMatriz(memoria), colunas);
         tabelaMemoria.setModel(model);
     }
@@ -55,12 +64,17 @@ public class Tela extends javax.swing.JFrame {
 
         tabelaRegistradores.setModel(model);
     }
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         modoOperacao = new javax.swing.ButtonGroup();
         jFileChooser1 = new javax.swing.JFileChooser();
+        buttonGroup2 = new javax.swing.ButtonGroup();
+        jFileChooser2 = new javax.swing.JFileChooser();
+        jButton1 = new javax.swing.JButton();
         botaoExecutar = new javax.swing.JButton();
         tabelaMemoriaScroll = new javax.swing.JScrollPane();
         tabelaMemoria = new javax.swing.JTable();
@@ -74,9 +88,14 @@ public class Tela extends javax.swing.JFrame {
         resetButton = new javax.swing.JButton();
         toggleModoTabela = new javax.swing.JToggleButton();
         selectStepDuration = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+
+        jButton1.setText("jButton1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(51, 204, 255));
+        setBackground(new java.awt.Color(204, 102, 255));
         setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         botaoExecutar.setText("Prox Instrução");
@@ -114,7 +133,7 @@ public class Tela extends javax.swing.JFrame {
         ));
         tabelaRegistradoresScroll.setViewportView(tabelaRegistradores);
 
-        modoStep.setBackground(new java.awt.Color(51, 204, 255));
+        modoStep.setBackground(new java.awt.Color(204, 153, 255));
         modoOperacao.add(modoStep);
         modoStep.setSelected(true);
         modoStep.setText("Manual");
@@ -124,7 +143,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        modoContinuo.setBackground(new java.awt.Color(51, 204, 255));
+        modoContinuo.setBackground(new java.awt.Color(204, 153, 255));
         modoOperacao.add(modoContinuo);
         modoContinuo.setText("Contínuo");
         modoContinuo.addActionListener(new java.awt.event.ActionListener() {
@@ -133,7 +152,7 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
-        modoIntervalo.setBackground(new java.awt.Color(51, 204, 255));
+        modoIntervalo.setBackground(new java.awt.Color(204, 153, 255));
         modoOperacao.add(modoIntervalo);
         modoIntervalo.setText("Depuração");
         modoIntervalo.addActionListener(new java.awt.event.ActionListener() {
@@ -172,6 +191,27 @@ public class Tela extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Arquivo 1");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Compilar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Arquivo 2");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -182,21 +222,26 @@ public class Tela extends javax.swing.JFrame {
                     .addComponent(toggleModoTabela)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(resetButton)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(consoleScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(modoStep)
                                             .addComponent(modoContinuo)
-                                            .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(modoIntervalo)
-                                            .addGap(18, 18, 18)
-                                            .addComponent(selectStepDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(46, 46, 46)
-                                    .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(consoleScroll, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 479, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(botaoExecutar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addComponent(modoIntervalo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(70, 70, 70)))
+                                        .addGap(66, 66, 66)
+                                        .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(resetButton))
+                                .addComponent(selectStepDuration, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(45, 45, 45)
                         .addComponent(tabelaMemoriaScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(44, 44, 44))
@@ -209,6 +254,12 @@ public class Tela extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(resetButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2)
+                            .addComponent(jButton4))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton3)
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(tabelaRegistradoresScroll, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
@@ -242,11 +293,12 @@ public class Tela extends javax.swing.JFrame {
                 this.preencheTabela(this.memoria);
             }
             case 1 -> {
-                while (instrucoes.getInstrucao(this) != 0) {}
+                while (instrucoes.getInstrucao(this) != 0) {
+                }
                 this.preencheTabelaRegistradores(registradores);
                 this.preencheTabela(this.memoria);
             }
-            case 2 -> {                
+            case 2 -> {
                 Timer timer = new Timer();
                 timer.schedule(new TaskDepuracao(this), 0, stepDuration);//wait 0 ms before doing the action and do it evry 1000ms (1second)
             }
@@ -286,7 +338,7 @@ public class Tela extends javax.swing.JFrame {
         } catch (IOException ex) {
             Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         this.preencheTabelaRegistradores(registradores);
         this.preencheTabela(this.memoria);
         console.setText("");
@@ -304,13 +356,68 @@ public class Tela extends javax.swing.JFrame {
     private void toggleModoTabelaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_toggleModoTabelaActionPerformed
         dados.toggleDecimal();
         this.preencheTabela(this.memoria);
-        
+
         if (dados.decimal == true) {
             toggleModoTabela.setText("Binário");
         } else {
             toggleModoTabela.setText("Decimal");
         }
     }//GEN-LAST:event_toggleModoTabelaActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivo 1", "txt");
+
+        fileChooser.setFileFilter(filter);
+        int retorno = fileChooser.showOpenDialog(this);
+
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            caminho1 = file.getPath();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        MacroProcessor macroProcessor = new MacroProcessor();
+        Montador montador = new Montador();
+        Ligador ligador = new Ligador();
+        try {
+            if (caminho1 != "") {
+                macroProcessor.processMacros(caminho1, "./src/arquivos/MASMAPRG1.asm");
+                montador.monta("./src/arquivos/MASMAPRG1.asm");
+                
+                if (caminho2 != "") {
+                    macroProcessor.processMacros(caminho2, "./src/arquivos/MASMAPRG2.asm");
+                    montador.monta("./src/arquivos/MASMAPRG2.asm");
+                    ligador.liga("./src/arquivos/MASMAPRG1.obj", "./src/arquivos/MASMAPRG2.obj");
+                } else {
+                    ligador.liga("./src/arquivos/MASMAPRG1.obj");
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(Tela.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Arquivo 2", "txt");
+
+        fileChooser.setFileFilter(filter);
+        int retorno = fileChooser.showOpenDialog(this);
+
+        if (retorno == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            caminho2 = file.getPath();
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -348,9 +455,16 @@ public class Tela extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoExecutar;
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JTextArea console;
     private javax.swing.JScrollPane consoleScroll;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JFileChooser jFileChooser1;
+    private javax.swing.JFileChooser jFileChooser2;
     private javax.swing.JRadioButton modoContinuo;
     private javax.swing.JRadioButton modoIntervalo;
     private javax.swing.ButtonGroup modoOperacao;

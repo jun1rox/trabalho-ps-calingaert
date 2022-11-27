@@ -25,8 +25,7 @@ public class Calingaert {
         registradores.setPC(valor_pc);
         String caminho = "../fibonacci.txt";
         
-        MacroProcessor macroProcessor = new MacroProcessor();
-        macroProcessor.processMacros("../test_macros2.txt");
+        
         Montador montador = new Montador();
         Ligador ligador = new Ligador();
         
@@ -49,7 +48,7 @@ public class Calingaert {
         tela.preencheTabela(memoria);
         tela.preencheTabelaRegistradores(registradores);
         tela.setResizable(false);
-        tela.getContentPane().setBackground(new Color(51, 204, 255));
+        tela.getContentPane().setBackground(new Color(204, 153, 255));
         tela.setVisible(true);
     }
 

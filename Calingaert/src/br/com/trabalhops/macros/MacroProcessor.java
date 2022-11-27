@@ -18,7 +18,7 @@ import java.util.Stack;
 public class MacroProcessor {
 
     private String path;  // setted by processMacros with "../test_macros.asm" for testing porpouses
-    private final String outputFile = "./src/arquivos/MASMAPRG.ASM";
+    private String outputFile;
     private BufferedReader reader;
     private BufferedWriter writer;
     private String line;
@@ -33,7 +33,8 @@ public class MacroProcessor {
     private String newMacroDefinition;
     private Stack<String> macroCallStack = new Stack<>();
 
-    public boolean processMacros(String path) throws IOException {
+    public boolean processMacros(String path, String outputFile) throws IOException {
+        this.outputFile = outputFile;
         this.path = path;
         this.reader = new BufferedReader(new FileReader(this.path));
         this.writer = new BufferedWriter(new FileWriter(this.outputFile));
