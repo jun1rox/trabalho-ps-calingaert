@@ -503,7 +503,7 @@ public class Montador {
         // e busca se o simbolo ja existe na tabela
         findNumeros = numeros.matcher(palavra);
         if (!findNumeros.find()) {       // VERIFICAR NOME DO SIMBOLO (PODE TER NUMEROS)
-            if (!existeSimbolo(palavra)) {
+            if (!existeSimbolo(palavra) && !inSimbolosExternos(palavra)) {
                 simbolos.add(new Simbolo(palavra, 0));
             } 
             return true;
