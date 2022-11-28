@@ -109,7 +109,7 @@ public class MacroProcessor {
                         }
                         
                         if (newParameter != null){
-                            parameters[i] = "#(" + newParameter.getLevel() + ";" + (newParameter.getPosition() + 1) + ")";
+                            parameters[i] = "$(" + newParameter.getLevel() + ";" + (newParameter.getPosition() + 1) + ")";
                         }
                     }
                 }
@@ -154,7 +154,7 @@ public class MacroProcessor {
                         }
                         
                         if (newParameter != null){
-                            parameters[i] = "#(" + newParameter.getLevel() + ";" + (newParameter.getPosition() + 1) + ")";
+                            parameters[i] = "$(" + newParameter.getLevel() + ";" + (newParameter.getPosition() + 1) + ")";
                         }
                     }
                 }
@@ -214,11 +214,11 @@ public class MacroProcessor {
                 //replace '#(k, i)' by
                 //if k=1 then actual-parameter list[i] from actual-parameter stack
                 //else '#(k-1, i)'
-                if (this.words.get(2).contains("#")){
+                if (this.words.get(2).contains("$")){
                     String[] parameters = this.words.get(2).split(",");
 
                     for (int i = 0; i < parameters.length; i++){
-                        if (parameters[i].contains("#")){
+                        if (parameters[i].contains("$")){
                             char k = parameters[i].charAt(2);
                             int i2 = Character.getNumericValue(parameters[i].charAt(4));
                             if (k == '1'){
