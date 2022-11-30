@@ -1,14 +1,9 @@
 package br.com.trabalhops.calingaert;
 
 import br.com.trabalhops.gui.Tela;
-import br.com.trabalhops.ligador.Ligador;
-import br.com.trabalhops.macros.MacroProcessor;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import br.com.trabalhops.maquinavirtual.Memoria;
 import br.com.trabalhops.maquinavirtual.Registradores;
-import br.com.trabalhops.montador.Montador;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 
@@ -32,7 +27,7 @@ public class Calingaert {
         tela.preencheTabela(memoria);
         tela.preencheTabelaRegistradores(registradores);
         tela.setResizable(false);
-        tela.getContentPane().setBackground(new Color(204, 153, 255));
+        tela.getContentPane().setBackground(new Color(135, 135, 255));
         tela.setVisible(true);
     }
 

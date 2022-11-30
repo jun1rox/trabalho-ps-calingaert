@@ -52,29 +52,33 @@
                   <Component id="toggleModoTabela" min="-2" max="-2" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" alignment="0" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="consoleScroll" alignment="1" min="-2" pref="479" max="-2" attributes="0"/>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="modoStep" min="-2" max="-2" attributes="0"/>
-                                          <Component id="modoContinuo" min="-2" max="-2" attributes="0"/>
-                                          <Component id="botaoExecutar" alignment="1" min="-2" pref="150" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="1" attributes="0">
-                                              <Component id="modoIntervalo" min="-2" pref="80" max="-2" attributes="0"/>
-                                              <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" attributes="0">
+                                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                              <Component id="modoStep" alignment="0" max="32767" attributes="0"/>
+                                              <Component id="modoContinuo" alignment="0" pref="115" max="32767" attributes="0"/>
                                           </Group>
+                                          <EmptySpace min="101" pref="101" max="-2" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="66" max="-2" attributes="0"/>
-                                      <Component id="tabelaRegistradoresScroll" min="-2" pref="281" max="-2" attributes="0"/>
+                                      <Group type="102" alignment="1" attributes="0">
+                                          <Component id="botaoExecutar" min="-2" pref="190" max="-2" attributes="0"/>
+                                          <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <Component id="resetButton" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="tabelaRegistradoresScroll" min="-2" pref="281" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="resetButton" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                               <Component id="selectStepDuration" alignment="1" min="-2" pref="80" max="-2" attributes="0"/>
+                              <Component id="consoleScroll" alignment="1" max="32767" attributes="0"/>
                           </Group>
-                          <Component id="jButton3" min="-2" pref="115" max="-2" attributes="0"/>
-                          <Group type="102" attributes="0">
-                              <Component id="jButton2" min="-2" pref="89" max="-2" attributes="0"/>
+                          <Component id="modoIntervalo" alignment="0" min="-2" pref="115" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="jButton3" alignment="1" min="-2" pref="89" max="-2" attributes="0"/>
+                                  <Component id="jButton2" min="-2" pref="89" max="-2" attributes="0"/>
+                              </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jButton4" min="-2" pref="89" max="-2" attributes="0"/>
                           </Group>
@@ -225,7 +229,7 @@
     <Component class="javax.swing.JRadioButton" name="modoStep">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="99" red="cc" type="rgb"/>
+          <Color blue="ff" green="87" red="87" type="rgb"/>
         </Property>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="modoOperacao"/>
@@ -240,7 +244,7 @@
     <Component class="javax.swing.JRadioButton" name="modoContinuo">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="99" red="cc" type="rgb"/>
+          <Color blue="ff" green="87" red="87" type="rgb"/>
         </Property>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="modoOperacao"/>
@@ -254,7 +258,7 @@
     <Component class="javax.swing.JRadioButton" name="modoIntervalo">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="ff" green="99" red="cc" type="rgb"/>
+          <Color blue="ff" green="87" red="87" type="rgb"/>
         </Property>
         <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
           <ComponentRef name="modoOperacao"/>
